@@ -1,8 +1,14 @@
 {
-  "updated_at": "2026-10-05T12:48:15.943Z",
+  "updated_at": "2026-10-05T14:21:55.175Z",
   "model": "stepfun/step-3.7-flash:free",
   "gateway": "https://api.kilo.ai/api/gateway/v1/chat/completions",
   "news_items": [
+    {
+      "title": "Flávio e Lula no 2º Turno: veja a repercussão internacional do resultado das eleições - G1",
+      "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQWVJoVWRvQ0J6X09VY1R2TTlIQlUtUUdWRkxRN2ZrWUU2SWpWUHUzX3hrM241bFFLMFBZM09fZW5fbzNmTlROMGVzOGF5WklQWkRYVWtWRFRmQlpVaVdYSUZscWo1TWdiU0tYY2tHMnRYSW8wc0w0alpXU1BJRGNIamxWaUhwOHRUTHJGQ21DSEVkS2twRVBpOWhSaENMNnRyWFZ4NU9yMmI4VDF3WGdzZnNXVElJbVM3ZVZHVElOSdIBzgFBVV95cUxObzdPeHdPRS1DZDRxMUVhNnk1eHZmS3g4bDg5WWNFSGNSdTZUdVZ4ZTFmTzBXdlVMaEIxXzdfT05fS3ltcW05cUZPcnN1MXYxeUMtQlBqMmNpQ2VLZVljdVVfTXJkb0NkZENkeTd0NndNQURVWTdKTEx3dURwYmJManBRa2ZzU3VCTW5LcHpCMm1EZUNGcDVfVm93bk44R0htZHFBbEM1QVJzVFoxd3N3d1RLSWxkQXB0QjhiV0tjOXVDMXJIZHNNSEFNY01tQQ?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 00:58:41 GMT",
+      "source": "G1"
+    },
     {
       "title": "Flávio Bolsonaro (PL) e Lula (PT) vão disputar o 2º turno para a Presidência da República - Tribunal Superior Eleitoral",
       "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNajZUMmExR1hxNE5MWjFGVXZNNFZoVDFXbmFQZFl5RS1NQlJ1V3JlNUdudnB4U3F3MEpscFhWWjdFWTZFRDRFVXVhaHV6eFBLYXoyc0luQ3dMOF81TWhSeVdVbXY2THZoQzltWmdqRGpyUkxIMzlId25PblZnZzdPYVNmOWtEZmNlUzlSMGp2bFN1dTZhbUlQSEo4S2hFTHJmbEdocWRZX0NRbEl3UlJCaDl2Y0xOdVAyanFUc1M5R0pIb2phY3dIZnVkUHlLMTVXdkE?oc=5",
@@ -10,22 +16,10 @@
       "source": "Tribunal Superior Eleitoral"
     },
     {
-      "title": "Eleição 2026: diferença entre Flávio e Lula é a menor da história entre candidatos no 1º turno - G1",
-      "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNWVhMcWVhX21aNHRta0sxdWNuMmVYNUZpNWw3bjFCT1l2M29DRHJRcEt2TlFzRnZ6aFBZbzlwUmk5VkluZ240czBKTzg1c2h0RS1kREo4eWdOVmhsSVFTUTNBQjk4V1lxcURSZ21wakUtejBNTDh4X0h6STU5MEVQNlBIMVBhenhhRDV5Vi10OFRfM1dHWnpyczlzYXNlb1ZaQ3BrckxnWi1NLWxlczlES0RvRzUyY0UxOEQ2bjZkMjRWOG9PWDZ0TmRWUmdFcVFrZ3dmV2p5MFVGS2RhaUHSAewBQVVfeXFMUFNDTG02M2IzSC16SXBLRDhIVVMwZHcyMkp4MG9ZR0dnSDd4MThfYi1IT1hpaENLQ1drUGp1QVk3cWxXRUZsb3pEams2Tkp4RWNoWGhjUUFkV0dsSlo4dkdhTUF1UEpHS2EzQ3lKUjVDbHRyNDVsazJLSndkUE9JNnM2V01WNlFFTTRoNTVLRTFkWVhlNnJGakd2V1lZYUI5akl3UUlobTdEVWw4R0Z5S1Z6WGJmTDMwM1l3OTl0RXpfd2ZSSlFtMEd3dDNaeHJXVG55YkxoVDVGYkw0UjE0bTFTYmZZZjhDSENHM3Y?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 02:13:35 GMT",
-      "source": "G1"
-    },
-    {
-      "title": "Os maiores vencedores e os maiores perdedores do primeiro turno das eleições 2026 - bbc.com",
-      "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5tUGwzVjdsMGl6NVAzS3dqcGlMNHY2aUE0bkdMVEQ1a2hxT2JVWWxFY2FHLTFRaDRXZ2ZMdlR4OWNwSGZZX0tXYlZxejJ1akpWMGhqQ1dzcWZvbF9nMEN5bkdoc9IBaEFVX3lxTE9hRVJxTXNyVGxab28xQ1YtcGw0RzE3QjFIZnBPSUxLZW0yM2xuZnpJYU1maFhxejZyaTJuNXBKYzhtYnVpd2UzUEx5VkhpOGtvWkNLczhhaXFHcmNwNEwyUVc3RlJuYWU5?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 10:19:41 GMT",
-      "source": "bbc.com"
-    },
-    {
-      "title": "Revés no 1º turno força Lula a rever estratégia de campanha contra Flávio Bolsonaro - Folha de S.Paulo",
-      "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxONnNxd2wyc1FqbTBxNEdReHBPWm1LblI2WDNwX0p1cGRqV3cydERZM2VJdjhUNmh4RGtncmRnc0RXWU1jQ0JnNnV4dnNhN2dqN29zSFRhU3RtNkFuRU9EalMxYXZjc1dNR2NBWEZwZFNCbzdOZXNVVmFQVnpBbkRkWXpFTS1mLS12dV8xU2JzVXdLOTF3Z1R4Y0g1eU9yUlhvRTFIalRzaTdTV0xSSVdQN0RfXzdQb2lHb2xlcjRIa1dSbW04N0xzVlpza3Zhdw?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 07:00:00 GMT",
-      "source": "Folha de S.Paulo"
+      "title": "AO VIVO Resultado das eleições 2026 - notícias e análises da apuração para presidente, governador e Senado - JOTA Jornalismo",
+      "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPMTlKcVhaQkpDb0xiRDFTXzBhSEFyN0N2cC1CWXR2dEVhU0EybTNXS05FWlpwVnRBZjcybkxVT1FKY3NQZDF3cW9FX3MwV0l2bEQyRGJWNTVqUGhHRDJQN01mYm9PNi1hbWgyc3Rrenhtbi1jX1ZIMGE3ZmVLUV9iZWVnS2xadG9DVmYyUkxNOWtzVml0TnZ3eU5lS0JORTVUZjlVTlRQbnJMX3JSaGZnU0lqODdEc0NyaHBZdTNJMDU4aHFmVVVQOXRWNHpIWWZURGprd3ZtbkpPX3VDUElZ?oc=5",
+      "pubDate": "Sun, 04 Oct 2026 23:15:00 GMT",
+      "source": "JOTA Jornalismo"
     },
     {
       "title": "Quando será o segundo turno das eleições? Veja a data - Agência Brasil",
@@ -34,22 +28,22 @@
       "source": "Agência Brasil"
     },
     {
-      "title": "Eleições 2026 AO VIVO – notícias e análises dos resultados para presidente e nos estados - JOTA Jornalismo",
-      "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQYVNIaEV2b0lRRG1tSE9hYk5uS01Wekg5aTk5ZGVOdlhraTVhSzhhRDFnSzd0OUZTVThHcnBKc1ZJNFhEbGI0VDNlT1ZwLVNjNGVWUVBlYnA1SnZST0dmMnlIOW5CZzh5YTZuTXNKZ0Z2NklYd25RQXhxcTNIeEVtaTRfQkJrakpNRl9QRG5jUGxpY2ZXZ1ppSmJ0Rkx5WFJ6aHFnbFRreHcza2owLUtUejZyVXUxcmwxSkJrV2hTcUUwOUF1dUZGZXFiTQ?oc=5",
-      "pubDate": "Sun, 04 Oct 2026 20:21:05 GMT",
-      "source": "JOTA Jornalismo"
+      "title": "Flávio garante 5 palanques estaduais com aliados no 2º turno; Lula em 4 - UOL Notícias",
+      "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNcDJ2SGxoLU1GVlhSVmpRWVRIb0IzYmZyemIyOVoxbHR6bDh1eEZPWXlsN2xOZXI2QzF1QWZFVWFxQkJhcFVDc29rdUlqV01fYmx2dFdReVlrWlFraHBhUU1BbmxleExBNm1NWlNwZjBXNlpHbUd3QnZUcmpNRmdxTnl2dTdtaTJoRm53bGw5ZXliRHBETnQ1Tjl3?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 08:00:48 GMT",
+      "source": "UOL Notícias"
     },
     {
-      "title": "Flávio Bolsonaro vence Lula em 15 estados e no DF no 1º turno - Gazeta do Povo",
-      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQeVUteE5yYmVwN25GU3NFQklZQXNLWTJEdjhSTnZianBhZVBlZml4cVV5MGc4VkFuN1VMc09XSy1IbXJIVl9Qc3A4QUpHWkltbE5JMjVlaFd1anl1UE9ZUUllSlJqV2VyMmVmT1l2YXRwX1czSGVzVXZfX2RIMGZOZHN5SWFBbXdn?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 02:57:00 GMT",
+      "title": "Os maiores vencedores e os maiores perdedores do primeiro turno das eleições 2026 - BBC",
+      "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5tUGwzVjdsMGl6NVAzS3dqcGlMNHY2aUE0bkdMVEQ1a2hxT2JVWWxFY2FHLTFRaDRXZ2ZMdlR4OWNwSGZZX0tXYlZxejJ1akpWMGhqQ1dzcWZvbF9nMEN5bkdoc9IBaEFVX3lxTE9hRVJxTXNyVGxab28xQ1YtcGw0RzE3QjFIZnBPSUxLZW0yM2xuZnpJYU1maFhxejZyaTJuNXBKYzhtYnVpd2UzUEx5VkhpOGtvWkNLczhhaXFHcmNwNEwyUVc3RlJuYWU5?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 12:09:46 GMT",
+      "source": "BBC"
+    },
+    {
+      "title": "Só um de seis institutos de pesquisa apontava Flávio numericamente à frente de Lula - Gazeta do Povo",
+      "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOd0xSN1B3VWVMazZGRW5uVk1TS2FCUFB0WFF1cHZ0VHl1OEExMG1lMzZ0ZTNyTHdlS3lRdDEtMkhPb1kzQ2tVNlBKRzR0QTRNY2JsU0JDODU3ajNmdldnYU9UNkxOd1ZwUGJNSnp4aFFRbFhFSkN2bjRVeW15WnNnR0hmSE96SUdhVkpKbzNzYU55cEE5ekMxMTRSQjlsXzg5OHh3TkZtV0Eya2RLX01WMkFBNnQtbklJNkgxX3R5ckdZOXpyWjBqT01raUxwalVSeTN6ZWxETHI1R0lCMTV2bGtYUkdVdw?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 03:13:00 GMT",
       "source": "Gazeta do Povo"
-    },
-    {
-      "title": "Flávio Bolsonaro e Lula disputam o segundo turno das eleições para presidente - Senado Federal",
-      "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPbW1RNFdiWldHVGI4TEFDUnBzMG9sQy0zRndjUTVhX3g3Sk9TeFhQaXJyMEVGTjBjdEtuaFdQRzVrQVN3NF8zcXhGS0xjUGVHTnRDUE9EdW8xOFQ0NFZfQTBYZURQT3NZbkFhV0EwOVA3SUJuOUowV1pteHBpd1lGd3FXQTRMc0pZbm1XMnZVbHNqS1ZDQnN1T2lXQ2EwVE9WU3VBSXQtb2stSDJLMEwzaGhtUGdWcDJicGl5UXExOWZRNzlSYVpXaGlMZlBTTW8?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 02:02:34 GMT",
-      "source": "Senado Federal"
     },
     {
       "title": "Eleições 2026: o que Lula e Flávio propõem para concursos - Qconcursos Folha Dirigida",
@@ -58,28 +52,28 @@
       "source": "Qconcursos Folha Dirigida"
     },
     {
-      "title": "AO VIVO: Acompanhe a apuração do primeiro turno das eleições de 2026 - VEJA",
-      "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNcERHRy1zbmZpcUVhUUJnak8tOEppMndza1A1MU9NWVMteEVrWnhMM1E0LWxTdWVkTUpmWkV2bXdkQ3dSeFdvVDc2MjczRThsdFI0LU1yX2VkUjVFUWZzN3lOSWd1Ny1oRHRpN2xQQjZ3blFVdnNpckFoTXUwLVZSN0t5cnpyYzVIXzZHM2duZnI3MnRvMTlLWmdxSVhLS3k3RFFF?oc=5",
-      "pubDate": "Sun, 04 Oct 2026 20:01:56 GMT",
-      "source": "VEJA"
+      "title": "Flávio Bolsonaro e Lula disputam o segundo turno das eleições para presidente - Senado Federal",
+      "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPbW1RNFdiWldHVGI4TEFDUnBzMG9sQy0zRndjUTVhX3g3Sk9TeFhQaXJyMEVGTjBjdEtuaFdQRzVrQVN3NF8zcXhGS0xjUGVHTnRDUE9EdW8xOFQ0NFZfQTBYZURQT3NZbkFhV0EwOVA3SUJuOUowV1pteHBpd1lGd3FXQTRMc0pZbm1XMnZVbHNqS1ZDQnN1T2lXQ2EwVE9WU3VBSXQtb2stSDJLMEwzaGhtUGdWcDJicGl5UXExOWZRNzlSYVpXaGlMZlBTTW8?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 02:02:34 GMT",
+      "source": "Senado Federal"
     },
     {
-      "title": "Bolsonarismo vira a diferença sobre Lula em relação a 2022 - Poder360",
-      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOWjB2VzFZZTB5ZUVjVVh0Z2thajhzR051RGZRdGdHbnNUa2ZJWU9tdEJzSUxwVjA1RllrWVhDa0JncEZVUzVyMTJlMjhyY0lwWUE3Qk9jNGpfTFpHZjRnbUJZYW5xYndWTnVuMFhMNElsaWQxRTVhcGVHVnNIejFjWk9KYk5aWnZ3aWdoaEd1QWZHSnZJam13VlhnZUx4Q1JWSVhWU19nOHJENXM?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 07:07:03 GMT",
+      "title": "Lula quer um duplo ineditismo: virar no 2º turno e chegar no 4º mandato - Poder360",
+      "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNUHpmVkxSOHFQWjFfT3hscU1IVU5hWDNnOGJWNndMMWZvazd4UHF4N08wcDBmbW5KVEtTcmEzQ3pfS1VfYUxpQVhXbzdiSENfM2NDUDE4ZGhjNDFESFlpeGRXZEpRZW42SnJoYkI0Q3hCQ2RXV0NWMEJ2V05oWkw5akRoMFBENWxLN19BM3pXX0wwXzlCWm9rODFYTUNmeFhZeHhlVk1hRTVraGRmd05aeUFiNk1sNFNTNm1v?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 12:58:33 GMT",
       "source": "Poder360"
     },
     {
       "title": "O que esperar das campanhas de Flávio e Lula no 2º turno - Nexo Jornal",
       "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOSVZidDRfa29lOHNxT1RwZVVoZlNULThSd3NDakgyV0g5MWxRYXkxQnBnWTQ4enJzdGlld3hkcmE2b3RhRTZWZnpmbmUtVmtFYVRYNXJ5eHZ4UWtXZ0doR0tldTgwbGMyVFg4bDI2aTBJUTV2SFJaREt5dU1fekZyc2JNb0t0RUJvNlFWcTc3SzdpZkhnRmlWeDlvTHUzMTZMR3BR?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 10:03:01 GMT",
+      "pubDate": "Mon, 05 Oct 2026 10:30:00 GMT",
       "source": "Nexo Jornal"
     },
     {
-      "title": "Quaest: Flávio Bolsonaro empata com Lula no 2º turno - CartaCapital",
-      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNN0hTc3hodi1vZGEyU3FCMExjdWhXb1JqbzFoblR3enExRjZrMGxkZXozd2t3RXlCUHgzc29kbjNnNUtrVWhOQk1fd1JSVVlWZTNkNGZVWE5tSkFGNFI5bTZXcFdvRTFuM0FDOUU4THVsaV80MEkwMHJFM1JGcjhPMkF4ZFlzRS1Fb25NM0NySkJ3bUJRczJ0NA?oc=5",
-      "pubDate": "Sun, 04 Oct 2026 00:12:00 GMT",
-      "source": "CartaCapital"
+      "title": "AO VIVO: Acompanhe a apuração do primeiro turno das eleições de 2026 - VEJA",
+      "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNcERHRy1zbmZpcUVhUUJnak8tOEppMndza1A1MU9NWVMteEVrWnhMM1E0LWxTdWVkTUpmWkV2bXdkQ3dSeFdvVDc2MjczRThsdFI0LU1yX2VkUjVFUWZzN3lOSWd1Ny1oRHRpN2xQQjZ3blFVdnNpckFoTXUwLVZSN0t5cnpyYzVIXzZHM2duZnI3MnRvMTlLWmdxSVhLS3k3RFFF?oc=5",
+      "pubDate": "Sun, 04 Oct 2026 20:01:56 GMT",
+      "source": "VEJA"
     },
     {
       "title": "Flávio e Lula vão ao segundo turno; eleição será decidida no próximo dia 25 - Canal Rural",
@@ -88,10 +82,16 @@
       "source": "Canal Rural"
     },
     {
-      "title": "Flávio Bolsonaro e Lula Travam Disputa Acirrada e Eleição Deve Ir para 2º Turno, Mostram Pesquisas - Forbes Brasil",
-      "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE43enJfd00zaEpkN2R6QXk5TFhwWHVGVlU0MEg1ZVE1YmdOTG9ib0lZc25zTG5VRzducjBqVFBheHViSUZXYUoxNmUwMVNTRXdHTi1iVEJCemJGN3NWOUJoOE5xc3BMckxvWUpuMi1IcFkyU3dxS0VpUw?oc=5",
-      "pubDate": "Sun, 04 Oct 2026 15:12:00 GMT",
-      "source": "Forbes Brasil"
+      "title": "Quaest: Flávio Bolsonaro empata com Lula no 2º turno - CartaCapital",
+      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNN0hTc3hodi1vZGEyU3FCMExjdWhXb1JqbzFoblR3enExRjZrMGxkZXozd2t3RXlCUHgzc29kbjNnNUtrVWhOQk1fd1JSVVlWZTNkNGZVWE5tSkFGNFI5bTZXcFdvRTFuM0FDOUU4THVsaV80MEkwMHJFM1JGcjhPMkF4ZFlzRS1Fb25NM0NySkJ3bUJRczJ0NA?oc=5",
+      "pubDate": "Sun, 04 Oct 2026 00:12:00 GMT",
+      "source": "CartaCapital"
+    },
+    {
+      "title": "Quantos votos faltaram para Flávio Bolsonaro e Lula serem eleitos no primeiro turno? Veja os números - Terra",
+      "link": "https://news.google.com/rss/articles/CBMilwJBVV95cUxNOUVxOWxlTUVWVzFYcWVuNXNnWG1mdEJ6OUd5cmRGemJaQnlURnJnME1JdG4yTUpHd1dieFRONnptY3g0eE9nVEVtVmFhODY3ZjJfcmRMbUE2bEdtbkkyUDZnaWg1c2ExWWFwc09JTVlXRElUbVVHQWszOUFfQXNIakQ0dHBEb0pGaFlOMkR4VFRFdE1uWHNhUUdDMHhXOGI0YlRVUTRDZ3I1NVR1WV9XTGR2MjhvZVVKMUZNVXRBczRNRTUtR1A4YUF2N2tkRzdFMWIwaHFxME9US3hBTkFTUjFZcWpNTC1odHBDTG1ycjRGOUo4WENfb3JVZk9kbWZ4QldyeV91S2UxWVFIa2NZSU93TjdrMG8?oc=5",
+      "pubDate": "Mon, 05 Oct 2026 10:59:00 GMT",
+      "source": "Terra"
     },
     {
       "title": "Flávio Bolsonaro e Lula estão no 2º turno em onda da direita - Folha de S.Paulo",
@@ -106,33 +106,33 @@
       "source": "Valor Econômico"
     },
     {
-      "title": "Só um de seis institutos de pesquisa apontava Flávio numericamente à frente de Lula - Gazeta do Povo",
-      "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOd0xSN1B3VWVMazZGRW5uVk1TS2FCUFB0WFF1cHZ0VHl1OEExMG1lMzZ0ZTNyTHdlS3lRdDEtMkhPb1kzQ2tVNlBKRzR0QTRNY2JsU0JDODU3ajNmdldnYU9UNkxOd1ZwUGJNSnp4aFFRbFhFSkN2bjRVeW15WnNnR0hmSE96SUdhVkpKbzNzYU55cEE5ekMxMTRSQjlsXzg5OHh3TkZtV0Eya2RLX01WMkFBNnQtbklJNkgxX3R5ckdZOXpyWjBqT01raUxwalVSeTN6ZWxETHI1R0lCMTV2bGtYUkdVdw?oc=5",
-      "pubDate": "Mon, 05 Oct 2026 03:13:00 GMT",
-      "source": "Gazeta do Povo"
+      "title": "AO VIVO Resultado das eleições 2026 - Flávio Bolsonaro e Lula disputarão segundo turno da eleição presidencial - JOTA Jornalismo",
+      "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQQlVZZEdNZHpaTF9qVDY4N09UYTdtbkxtN2R3bF85LWdPRjZkcG9EanNvQnByMlR2T2hMSmRfN21GY09sUUFlU09la2hzZjdYMU1VUWdMVHByckxERndhMW1JVUp2UVBZcnRYSUhEa3BVcTJabmRJVkRYUFRVajdsRS13akE5Mjg5S21SNTZFRHYweU1XdXFKNDg1b2FxMllwOVlOMmNzYXFtdWVtZ1liQThQTjZOeUFaMEVHaFBPWS13cjdJcHN5dnV2dmtXenduZEE?oc=5",
+      "pubDate": "Sun, 04 Oct 2026 20:47:00 GMT",
+      "source": "JOTA Jornalismo"
     }
   ],
   "analysis": {
-    "analise_clima_politico": "O segundo turno das eleições presidenciais de 2026 está extremamente acirrado, com a menor diferença de votos da história entre os dois candidatos no primeiro turno: Flávio Bolsonaro (PL) lidera com 47,03% dos votos, contra 45,16% de Lula (PT), uma vantagem de cerca de 2,2 milhões de votos. Flávio venceu em 15 estados e no Distrito Federal, mas Lula mantém domínio no Nordeste, região com maior peso eleitoral. Os mais de 8,9 milhões de votos de candidatos de centro e direita que não passaram para o segundo turno serão decisivos para a definição do resultado, com pesquisas apontando empate técnico na disputa final. O clima é de alta polarização, com o bolsonarismo tendo crescido em relação a 2022, mas com o eleitorado de centro ainda indeciso e sendo o principal objeto da disputa de ambos os candidatos nas próximas semanas.",
+    "analise_clima_politico": "O primeiro turno das eleições presidenciais de 2026 foi extremamente apertado, com Flávio Bolsonaro (PL) na frente por apenas 1,87 pontos percentuais (47,03% dos votos válidos contra 45,16% de Lula). Os candidatos de centro e direita não alinhados ao PL somaram 7,58% dos votos válidos, tornando a transferência de seus eleitores o fator decisivo para o segundo turno, que acontecerá no dia 25 de outubro. Flávio tem leve vantagem na estrutura de palanques estaduais (5 contra 4 de Lula), mas pesquisas recentes apontam empate técnico no cenário de segundo turno, e a alta mobilização do primeiro turno indica que a disputa será definida pela capacidade de cada candidato de reter sua base e conquistar os eleitores indecisos e dos candidatos eliminados.",
     "destaques_noticias": [
-      "Diferença entre Flávio Bolsonaro e Lula no primeiro turno é a menor da história entre candidatos que disputam o segundo turno, com vantagem de 2,2 milhões de votos para o candidato do PL",
-      "Flávio venceu em 15 estados e no DF, mas Lula mantém domínio no Nordeste, região com maior concentração de eleitores e maior aprovação histórica do PT",
-      "Candidatos de centro e direita não alinhados (Augusto Cury, Renan Santos, Ronaldo Caiado e Romeu Zema) somaram mais de 8,9 milhões de votos e serão decisivos para a definição do segundo turno",
-      "Pesquisas de boca de urna e institutos de pesquisa apontam empate técnico entre os dois candidatos no segundo turno, com Lula precisando reverter a pequena desvantagem do primeiro turno",
-      "O bolsonarismo cresceu em relação a 2022, mas a base de Lula se mantém fiel, com a disputa sendo definida pela transferência de votos do centro eleitoral"
+      "TSE confirma disputa de 2º turno entre Flávio Bolsonaro (PL) e Lula (PT) no dia 25 de outubro de 2026",
+      "Flávio Bolsonaro assegura 5 palanques estaduais de apoio no segundo turno, contra 4 de Lula, segundo levantamento do UOL",
+      "Pesquisa Quaest aponta empate técnico entre os dois candidatos no cenário de segundo turno, conforme reportagem da CartaCapital",
+      "Candidatos de centro e direita não alinhados ao PL (Augusto Cury, Renan Santos, Ronaldo Caiado e Romeu Zema) somaram 7,58% dos votos válidos no primeiro turno, sendo decisivos para a definição do vencedor",
+      "Apenas 1 dos 6 institutos de pesquisa consultados pela Gazeta do Povo apontava Flávio numericamente à frente de Lula antes do primeiro turno, indicando cenário de alta competitividade"
     ],
     "parametros_recomendados": {
-      "cury_to_lula_pct": 44,
-      "renan_to_lula_pct": 38,
+      "cury_to_lula_pct": 43,
+      "renan_to_lula_pct": 37,
       "caiado_to_lula_pct": 10,
       "zema_to_lula_pct": 7,
-      "flavio_defection_pct": 4.5,
-      "lula_retention_pct": 97.5,
-      "turnout_delta_ne": 1.8,
-      "turnout_delta_se": 0.3,
-      "turnout_delta_s": 0.7
+      "flavio_defection_pct": 4.7,
+      "lula_retention_pct": 97.7,
+      "turnout_delta_ne": 1.2,
+      "turnout_delta_se": 0.8,
+      "turnout_delta_s": 0.5
     },
-    "justificativa_parametros": "Os ajustes seguem a lógica de fidelidade das bases e alinhamento político dos candidatos do primeiro turno: Augusto Cury (Avante, centro) tem eleitorado majoritariamente moderado, que rejeita tanto o bolsonarismo radical quanto o PT, mas no segundo turno tende a migrar para Lula para evitar o espectro bolsonarista, por isso a transferência de 44%, alinhada ao centro histórico de transferência para o PT. Renan Santos (Missão, direita conservadora) tem eleitorado mais alinhado com pautas bolsonaristas, por isso a transferência para Lula é menor (38%), com parte do eleitorado optando por Flávio ou abstenção por rejeição ao PT. Ronaldo Caiado (PSD, centro-direita) é aliado histórico do bolsonarismo, com eleitorado majoritariamente alinhado com Flávio, por isso a transferência para Lula é baixa (10%), próxima ao centro de 11%. Romeu Zema (Novo, direita liberal) tem eleitorado majoritariamente alinhado com pautas econômicas de direita e forte rejeição ao PT, por isso a transferência para Lula é a menor entre os candidatos de espectro não petista (7%), abaixo do centro de 8% por maior fidelidade ao bloco de direita. O desvio de 4,5% da base de Flávio para Lula é menor que o centro de 5% por causa da alta fidelidade da base bolsonarista, que se mobilizou após o primeiro turno para evitar a volta de Lula, com apenas uma pequena parcela de eleitores que votaram em Flávio por rejeição a Lula migrando para o PT no segundo turno. A retenção de 97,5% da base de Lula é alinhada ao centro, refletindo a alta fidelidade do eleitorado petista, que tem forte rejeição ao bolsonarismo e baixa taxa de migração para outros candidatos ou abstenção no segundo turno. A variação de comparecimento no Nordeste é de +1,8 pontos percentuais, refletindo a maior mobilização do eleitorado petista na região, historicamente fiel a Lula e com maior taxa de comparecimento em segundos turnos. A variação no Sudeste é de +0,3 pontos percentuais, refletindo a disputa equilibrada na região, com mobilização de ambas as bases, resultando em aumento pequeno do comparecimento. A variação no Sul é de +0,7 pontos percentuais, refletindo a maior mobilização da base bolsonarista na região, historicamente alinhada com a direita e com maior taxa de comparecimento quando o candidato de direita está no segundo turno.",
-    "projecao_resumo": "Flávio Bolsonaro entra no segundo turno com vantagem de 2,2 milhões de votos em relação a Lula, obtida no primeiro turno, mas a transferência de votos dos candidatos de centro e direita e o maior comparecimento no Nordeste devem reverter essa desvantagem a favor de Lula, que deve vencer com uma margem de cerca de 4 milhões de votos. Para se manter na disputa, Flávio precisa manter a fidelidade da sua base bolsonarista, evitar desvios de eleitores que votaram nele por rejeição a Lula e conquistar a maioria dos eleitores de centro que rejeitam o PT. Lula, por sua vez, precisa reter a sua base fiel, conquistar a maioria dos eleitores de Augusto Cury e Renan Santos, e aumentar o comparecimento no Nordeste para ampliar sua vantagem na região mais favorável ao PT."
+    "justificativa_parametros": "- cury_to_lula_pct (43%): O eleitorado de Augusto Cury é majoritariamente moderado, sem alinhamento com a direita radical de Flávio Bolsonaro, o que favorece a transferência de votos para Lula, mas com resistência de parte do eleitorado mais liberal do candidato, ficando ligeiramente abaixo do centro de 44%.\n- renan_to_lula_pct (37%): Renan Santos representa um perfil de centro com apelo a eleitores progressistas em questões sociais, o que facilita a migração para Lula, mas parte de sua base tem ressalvas com a política econômica do PT, ficando um pouco abaixo do centro de 38%.\n- caiado_to_lula_pct (10%): Ronaldo Caiado é um político de centro-direita com histórico de alinhamento com setores conservadores, o que reduz a transferência de votos para Lula, ficando ligeiramente abaixo do centro de 11%.\n- zema_to_lula_pct (7%): Romeu Zema representa o liberalismo econômico de direita, com base eleitoral muito alinhada com o projeto de Flávio Bolsonaro, o que torna a migração para Lula muito baixa, ficando um pouco abaixo do centro de 8%.\n- flavio_defection_pct (4,7%): A base de Flávio Bolsonaro é extremamente fiel, com alta identificação com o projeto político da família Bolsonaro, o que reduz o desvio de votos para Lula, ficando ligeiramente abaixo do centro de 5,0%.\n- lula_retention_pct (97,7%): A base eleitoral de Lula é altamente fiel, com forte identificação com as políticas sociais e a trajetória do candidato, o que garante uma retenção muito alta, ficando ligeiramente acima do centro de 97,5%.\n- turnout_delta_ne (+1,2 p.p.): O Nordeste é a região com maior aprovação histórica de Lula, e a mobilização da base petista para tentar reverter a pequena desvantagem no primeiro turno deve aumentar o comparecimento em relação ao primeiro turno.\n- turnout_delta_se (+0,8 p.p.): O Sudeste é a região mais competitiva da eleição, com vantagem de Flávio no primeiro turno, e a mobilização de ambas as bases para definir o resultado deve aumentar o comparecimento.\n- turnout_delta_s (+0,5 p.p.): O Sul é a região com maior aprovação de Flávio Bolsonaro, e a mobilização da base conservadora para manter a vantagem deve aumentar o comparecimento em relação ao primeiro turno.",
+    "projecao_resumo": "Flávio Bolsonaro parte na frente com uma vantagem de 1,87 pontos percentuais, mas a disputa está tecnicamente empatada considerando a transferência de votos dos candidatos eliminados. Para vencer, Flávio precisa manter a fidelidade de sua base e capturar pelo menos 55% dos votos dos candidatos de centro e direita não alinhados ao PL. Lula, por sua vez, precisa reter 98% ou mais de sua base eleitoral e conquistar pelo menos 45% dos votos desses candidatos, além de aumentar a mobilização de seus eleitores no Nordeste e nas regiões metropolitanas do Sudeste para reduzir a desvantagem na região mais populosa do país."
   }
 }

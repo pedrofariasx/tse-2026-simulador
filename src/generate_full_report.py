@@ -53,7 +53,7 @@ md = f"""# Eleições Gerais 2026 — Análise Completa do 1º Turno Presidencia
 **Pleito Auditado:** Eleição Ordinária Federal **6257** (Ciclo `ele2026`), Cargo 1 (Presidente), 1º Turno  
 **Corte da Apuração:** {BR["atualizado"]} — **{BR["pct_secoes"]}%** das seções totalizadas  
 **Escopo da Raspagem:** **12.078 endpoints auditados com 0 falhas** (1 Nacional, 28 UFs/Exterior, 5.757 Municípios, 6.292 Zonas Eleitorais)  
-**Validação Estatística:** Soma municipal vs. totalização oficial nacional diverge em apenas −0,0071% (cobertura residual)  
+**Validação Estatística:** Soma dos candidatos e das 28 UFs = total oficial (divergência **zero**); soma dos 5.757 municípios diverge em −0,0079% (cobertura residual)  
 
 ---
 
@@ -68,7 +68,7 @@ O 2º turno da eleição presidencial de 2026 **já está matematicamente defini
 | **Vantagem Flávio** | **+{f(diff_1t)} votos** (+{pct(diff_1t_pct)} p.p.) | **+{f(-sim["central"]["margem"]["p50"])} votos** (+{pct(-sim["central"]["margem"]["p50"] / (sim["central"]["mLula"] + sim["central"]["mFlavio"]) * 100)} p.p.) |
 | **Comparecimento** | {f(BR["comparecimento"])} ({p(BR["pct_comparecimento"])}%) | {f(sim["central"]["mLula"] + sim["central"]["mFlavio"])} ({p((sim["central"]["mLula"] + sim["central"]["mFlavio"]) / BR["aptos"] * 100)}% dos aptos) |
 
-### Probabilidade de Vitória (60.000 Simulações Monte Carlo)
+### Probabilidade de Vitória ({f(sim["sims"])} Simulações Monte Carlo)
 
 | Candidato | Probabilidade de Eleição | Intervalo de Confiança 90% da Margem |
 |---|---|---|

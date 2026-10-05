@@ -205,7 +205,7 @@
               >
               <span
                 class="shrink-0 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-normal"
-                >TSE 99,99%</span
+                >TSE <span id="lbl-pct-secoes">—</span>%</span
               >
             </h1>
             <p class="hidden sm:block text-xs text-slate-400">
@@ -1148,7 +1148,9 @@
                     <span class="text-slate-500">/</span>
                     <span class="text-amber-400">Protesto →</span>
                   </span>
-                  <span class="hidden sm:inline">Desvio Flávio ↓ \ Protesto Lula →</span>
+                  <span class="hidden sm:inline"
+                    >Desvio Flávio ↓ \ Protesto Lula →</span
+                  >
                 </th>
                 <th class="p-2.5 font-semibold">20%</th>
                 <th class="p-2.5 font-semibold">30%</th>
@@ -1588,6 +1590,10 @@
           if (el) el.textContent = txt;
         };
 
+        set(
+          "lbl-pct-secoes",
+          String(D.br.pct_secoes).replace(".", ","),
+        );
         set(
           "lbl-1t-flavio",
           `1º Turno: ${fmt(P.flav)} (${((P.flav / D.br.vv) * 100).toFixed(2).replace(".", ",")}%)`,
