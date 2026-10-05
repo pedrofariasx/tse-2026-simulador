@@ -1,0 +1,2463 @@
+<!doctype html>
+<html lang="pt-BR" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador Presidencial 2026 — 2º Turno | TSE Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                lula: "#ef4444",
+                flavio: "#2563eb",
+                neutral: "#64748b",
+                dark: "#0f172a",
+                card: "#1e293b",
+                border: "#334155",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      input[type="range"] {
+        accent-color: #3b82f6;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 3px;
+      }
+
+      /* ---------- Ajustes mobile ---------- */
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* evita o flash azul ao tocar */
+      a,
+      button,
+      input,
+      select,
+      label {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* toque mais fácil nos sliders (alvo maior, sem arrastar a página) */
+      input[type="range"] {
+        touch-action: pan-y;
+        /* a caixa do input é alta para ter área de toque real; a trilha
+           continua fina e centralizada dentro dela */
+        height: 30px;
+        background: transparent;
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        height: 8px;
+        border-radius: 999px;
+        background: #1e293b;
+        border-top: 1px solid #0f172a;
+        border-bottom: 1px solid #0f172a;
+      }
+      input[type="range"]::-moz-range-track {
+        height: 8px;
+        border-radius: 999px;
+        background: #1e293b;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 26px;
+        height: 26px;
+        margin-top: -9px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        border: 4px solid #1d4ed8;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+        cursor: pointer;
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        border: 4px solid #1d4ed8;
+        cursor: pointer;
+      }
+      input[type="range"]:focus-visible {
+        outline: 2px solid #60a5fa;
+        outline-offset: 3px;
+        border-radius: 999px;
+      }
+      /* em telas de toque, alvo ainda maior e polegar maior */
+      @media (pointer: coarse) {
+        input[type="range"] {
+          height: 38px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+          width: 32px;
+          height: 32px;
+          margin-top: -12px;
+        }
+        input[type="range"]::-moz-range-thumb {
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      /* sombra nas bordas indicando que a tabela rola na horizontal */
+      .scroll-hint {
+        -webkit-overflow-scrolling: touch;
+        background:
+          linear-gradient(to right, #0f172a 30%, rgba(15, 23, 42, 0)) left /
+            26px 100% no-repeat,
+          linear-gradient(to left, #0f172a 30%, rgba(15, 23, 42, 0)) right /
+            26px 100% no-repeat;
+        background-attachment: local, local;
+      }
+
+      @media (max-width: 640px) {
+        /* tabelas largas mantêm largura natural e rolam, em vez de espremer */
+        table {
+          min-width: max-content;
+        }
+      }
+
+      /* ---------- Header: uma linha no desktop, empilhado no mobile ----------
+         Escrito em CSS puro (não em variantes do Tailwind) porque a largura
+         disponível varia com o texto do título; aqui o comportamento é fixo. */
+      .hdr-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+      }
+      .hdr-title {
+        flex: 1 1 0%;
+        min-width: 0;
+      }
+      .hdr-nav {
+        flex: 0 0 100%;
+        order: 2;
+        margin-left: -0.75rem;
+        padding: 0 0.75rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .hdr-nav::-webkit-scrollbar {
+        display: none;
+      }
+      @media (min-width: 768px) {
+        .hdr-nav {
+          flex: 0 0 auto;
+          order: 0;
+          margin-left: auto;
+          padding: 0;
+          overflow-x: visible;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-950 text-slate-100 min-h-screen antialiased custom-scrollbar"
+  >
+    <!-- Header -->
+    <header
+      class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 hdr-wrap">
+        <div class="hdr-title flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div
+            class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-black text-blue-400"
+          >
+            26
+          </div>
+          <div class="min-w-0">
+            <h1
+              class="text-sm sm:text-lg font-bold leading-tight flex items-center gap-2 min-w-0"
+            >
+              <span class="truncate"
+                ><span class="sm:hidden">Simulador 2026 — 2º Turno</span>
+                <span class="hidden sm:inline"
+                  >Simulador Eleitoral 2026 — 2º Turno</span
+                ></span
+              >
+              <span
+                class="shrink-0 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-normal"
+                >TSE 99,99%</span
+              >
+            </h1>
+            <p class="hidden sm:block text-xs text-slate-400">
+              Eleição Geral Ordinária 6257 (Cargo 1: Presidente) • 5.757
+              municípios auditados
+            </p>
+            <p class="sm:hidden text-[10px] text-slate-400 leading-tight">
+              Pleito 6257 • 5.757 municípios
+            </p>
+          </div>
+        </div>
+
+        <!-- Nav: vira faixa rolável horizontal no mobile em vez de estourar a largura -->
+        <nav
+          aria-label="Navegação principal"
+          class="hdr-nav flex items-center gap-2 custom-scrollbar snap-x"
+        >
+          <div class="flex items-center gap-1.5 sm:gap-2 min-w-max">
+            <a
+              href="#simulador"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-blue-600 active:bg-blue-500 text-white transition"
+              >Simulador</a
+            >
+            <a
+              href="#ia"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-violet-500/20 active:bg-violet-500/30 text-violet-300 border border-violet-500/30 transition"
+              >🤖 Notícias</a
+            >
+            <a
+              href="#matriz"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-slate-800 active:bg-slate-700 text-slate-200 transition"
+              >Matriz 2D</a
+            >
+            <a
+              href="#municipios"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-slate-800 active:bg-slate-700 text-slate-200 transition"
+              >Municípios</a
+            >
+            <a
+              href="../reports/analise-2026.md"
+              target="_blank"
+              rel="noopener"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center gap-1 rounded-md bg-slate-800 active:bg-slate-700 text-slate-300 transition"
+            >
+              <span class="hidden sm:inline">Relatório Completo</span>
+              <span class="sm:hidden">Relatório</span> ↗
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Placar Geral Dinâmico -->
+    <section
+      class="bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800 py-5 sm:py-6 px-3 sm:px-4"
+    >
+      <div class="max-w-7xl mx-auto">
+        <!-- Live Scoreboard -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 mb-4">
+          <!-- Card Flávio Bolsonaro -->
+          <div
+            id="card-flavio"
+            class="bg-slate-900/90 rounded-2xl border-2 border-blue-600/40 p-4 sm:p-5 relative overflow-hidden transition-all duration-300 shadow-lg shadow-blue-950/20"
+          >
+            <div
+              class="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"
+            ></div>
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-blue-400"
+                  >PL · 22</span
+                >
+                <h2
+                  class="text-xl sm:text-2xl font-black text-white leading-tight"
+                >
+                  FLÁVIO BOLSONARO
+                </h2>
+                <p class="text-xs text-slate-400">Vice: Alfredo Gaspar (PL)</p>
+              </div>
+              <span
+                id="badge-winner-flavio"
+                class="hidden text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40"
+              >
+                Vencedor Projetado
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 my-3">
+              <span
+                id="pct-flavio"
+                class="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-400 tracking-tight"
+                >51,26%</span
+              >
+              <span id="votes-flavio" class="text-sm font-mono text-slate-300"
+                >59.152.595 votos</span
+              >
+            </div>
+
+            <!-- Progress bar -->
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+              <div
+                id="bar-flavio"
+                class="bg-blue-500 h-full transition-all duration-300"
+                style="width: 51.26%"
+              ></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-400 mt-2">
+              <span id="lbl-1t-flavio">1º Turno: —</span>
+              <span id="diff-flavio" class="text-blue-400 font-medium"
+                >+3.088.061 vs 1T</span
+              >
+            </div>
+          </div>
+
+          <!-- Card Lula -->
+          <div
+            id="card-lula"
+            class="bg-slate-900/90 rounded-2xl border-2 border-red-600/40 p-4 sm:p-5 relative overflow-hidden transition-all duration-300 shadow-lg shadow-red-950/20"
+          >
+            <div
+              class="absolute top-0 right-0 w-48 h-48 bg-red-500/10 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"
+            ></div>
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-red-400"
+                  >PT · 13</span
+                >
+                <h2 class="text-2xl font-black text-white">
+                  LUIZ INÁCIO LULA DA SILVA
+                </h2>
+                <p class="text-xs text-slate-400">
+                  Vice: Geraldo Alckmin (PSB)
+                </p>
+              </div>
+              <span
+                id="badge-winner-lula"
+                class="hidden text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/40"
+              >
+                Vencedor Projetado
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 my-3">
+              <span
+                id="pct-lula"
+                class="text-3xl sm:text-4xl lg:text-5xl font-black text-red-400 tracking-tight"
+                >48,74%</span
+              >
+              <span id="votes-lula" class="text-sm font-mono text-slate-300"
+                >56.229.253 votos</span
+              >
+            </div>
+
+            <!-- Progress bar -->
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+              <div
+                id="bar-lula"
+                class="bg-red-500 h-full transition-all duration-300"
+                style="width: 48.74%"
+              ></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-400 mt-2">
+              <span id="lbl-1t-lula">1º Turno: —</span>
+              <span id="diff-lula" class="text-red-400 font-medium"
+                >+2.487.823 vs 1T</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumo da Margem e Comparecimento -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+            <div class="text-[11px] text-slate-400 uppercase font-semibold">
+              Margem da Vitória
+            </div>
+            <div
+              id="metric-margin"
+              class="text-lg font-bold text-blue-400 mt-0.5"
+            >
+              Flávio por 2.923.342
+            </div>
+          </div>
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+            <div class="text-[11px] text-slate-400 uppercase font-semibold">
+              Total de Votos Válidos
+            </div>
+            <div
+              id="metric-total-valid"
+              class="text-lg font-bold text-slate-200 mt-0.5"
+            >
+              115.381.848
+            </div>
+          </div>
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+            <div class="text-[11px] text-slate-400 uppercase font-semibold">
+              Comparecimento Projetado
+            </div>
+            <div
+              id="metric-turnout"
+              class="text-lg font-bold text-slate-200 mt-0.5"
+            >
+              72,7% (115,4M)
+            </div>
+          </div>
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+            <div class="text-[11px] text-slate-400 uppercase font-semibold">
+              Probabilidade Monte Carlo
+            </div>
+            <div
+              id="metric-prob"
+              class="text-lg font-bold text-blue-400 mt-0.5"
+            >
+              Flávio 75,3% · Lula 24,7%
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUIA DE LEITURA PARA QUEM NÃO É ESPECIALISTA -->
+    <section
+      class="bg-slate-900/40 border-b border-slate-800 py-6 sm:py-8 px-3 sm:px-4"
+    >
+      <div class="max-w-7xl mx-auto">
+        <div class="bg-slate-900/70 rounded-2xl border border-slate-800 p-6">
+          <h2 class="text-xl sm:text-2xl font-black text-white mb-1">
+            🤔 Começando do zero: o que é isto aqui?
+          </h2>
+          <p class="text-sm text-slate-400 mb-6">
+            Se você nunca acompanhou uma eleição em detalhe, não se preocupe.
+            Esta seção explica tudo em linguagem simples. Pode pular direto para
+            o simulador se quiser.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="space-y-4">
+              <div
+                class="bg-slate-800/50 rounded-xl p-4 border-l-4 border-blue-500"
+              >
+                <h3 class="font-bold text-white mb-1.5">
+                  1. O que é o 1º turno?
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                  Em 4 de outubro de 2026, os brasileiros votaram para escolher
+                  o presidente. Como 12 candidatos disputavam,
+                  <strong>ninguém conseguiu mais da metade dos votos</strong>.
+                  Isso é normal: quando ninguém atinge 50%, os dois primeiros
+                  colocados avançam para o <strong>2º turno</strong>, que
+                  acontece em <strong>25 de outubro de 2026</strong>. No 2º
+                  turno são apenas <strong>dois candidatos</strong>, e vence
+                  quem tiver mais votos.
+                </p>
+              </div>
+
+              <div
+                class="bg-slate-800/50 rounded-xl p-4 border-l-4 border-emerald-500"
+              >
+                <h3 class="font-bold text-white mb-1.5">
+                  2. Quem já está no 2º turno?
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                  Já está definido:
+                  <strong class="text-blue-400">Flávio Bolsonaro (PL)</strong>
+                  com 47,03% e
+                  <strong class="text-red-400">Lula (PT)</strong> com 45,16%.
+                  Ninguém mais pode entrar na disputa. A pergunta que este site
+                  responde é:
+                  <strong class="text-amber-300">quem vai ganhar?</strong>
+                </p>
+              </div>
+
+              <div
+                class="bg-slate-800/50 rounded-xl p-4 border-l-4 border-amber-500"
+              >
+                <h3 class="font-bold text-white mb-1.5">
+                  3. Por que não dá para saber com certeza?
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                  Porque no 2º turno o eleitor
+                  <strong>não pode votar em quem quiser</strong> — só nos dois
+                  finais. Muita gente que votou em outros candidatos agora
+                  precisa escolher um dos dois.
+                  <strong
+                    >Para quem cada um desses 15 milhões de votos vai?</strong
+                  >
+                  Isso ninguém sabe. É exatamente isso que o simulador explora.
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div
+                class="bg-slate-800/50 rounded-xl p-4 border-l-4 border-purple-500"
+              >
+                <h3 class="font-bold text-white mb-1.5">
+                  4. O que são os "15 milhões de votos soltos"?
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed mb-3">
+                  No 1º turno,
+                  <strong class="text-blue-400"
+                    >Flávio venceu por 2,2 milhões de votos</strong
+                  >. Mas os votos de quem <em>não</em> foi nenhum dos dois somam
+                  <strong class="text-amber-300">15 milhões</strong> — quase 7
+                  vezes essa diferença. São eles:
+                </p>
+                <ul class="text-sm text-slate-300 space-y-1.5">
+                  <li
+                    class="flex justify-between border-b border-slate-700/50 pb-1"
+                  >
+                    <span>Cury e Renan Santos (voto de protesto)</span
+                    ><span class="font-mono text-amber-400">6,1 mi</span>
+                  </li>
+                  <li
+                    class="flex justify-between border-b border-slate-700/50 pb-1"
+                  >
+                    <span>Caiado e Zema (centro-direita)</span
+                    ><span class="font-mono text-blue-400">2,9 mi</span>
+                  </li>
+                  <li
+                    class="flex justify-between border-b border-slate-700/50 pb-1"
+                  >
+                    <span>Quem votou em branco ou anulou</span
+                    ><span class="font-mono text-slate-300">6,0 mi</span>
+                  </li>
+                </ul>
+                <p class="text-sm text-slate-300 mt-3">
+                  <strong>Consequência:</strong> a eleição está muito mais
+                  aberta do que a vantagem de 2,2 milhões sugere.
+                </p>
+              </div>
+
+              <div
+                class="bg-slate-800/50 rounded-xl p-4 border-l-4 border-rose-500"
+              >
+                <h3 class="font-bold text-white mb-1.5">
+                  5. Cuidado com a palavra "favorito"
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                  Quando este site diz que Flávio é "favorito" (73,7%), isso
+                  <strong>não</strong> quer dizer que ele <em>vai</em> ganhar.
+                  Quer dizer que, se as suposições do modelo se confirmarem, ele
+                  tem mais chances. Em 2022 a margem final foi de menos de 2
+                  pontos percentuais — e as pesquisas divergiam em quase 10
+                  pontos.
+                </p>
+                <p class="text-sm text-slate-300 leading-relaxed mt-2">
+                  Use o simulador como uma <strong>bússola de cenários</strong>,
+                  não como um palpite. Alimente-o com o que você sabe e veja
+                  como o resultado muda.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-5 border-t border-slate-800">
+            <h3 class="font-bold text-white mb-2 text-sm">
+              📖 Glossário rápido
+            </h3>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"
+            >
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <span class="font-bold text-amber-400"
+                  >Transferência de voto</span
+                >
+                <p class="text-slate-400 mt-1">
+                  Para onde vai o voto de quem era de um candidato que foi
+                  eliminado. É o conceito central deste site.
+                </p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <span class="font-bold text-purple-400">Desvio da base</span>
+                <p class="text-slate-400 mt-1">
+                  Porcentagem do eleitorado de um candidato que troca de ideia e
+                  vota no adversário. Sempre pequeno (aqui, 5%).
+                </p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <span class="font-bold text-emerald-400">Comparecimento</span>
+                <p class="text-slate-400 mt-1">
+                  Percentual de quem compareceu às urnas. No 2º turno sempre
+                  cai, porque as pessoas menos engajadas não vão.
+                </p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <span class="font-bold text-blue-400">Empate técnico</span>
+                <p class="text-slate-400 mt-1">
+                  Votos válidos praticamente iguais. Não existe vencedor—"vence"
+                  quem tiver 1 voto a mais.
+                </p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <span class="font-bold text-cyan-400">Baluarte</span>
+                <p class="text-slate-400 mt-1">
+                  Município que vota sempre com força num candidato. É um núcleo
+                  sólido, não muda de ideia.
+                </p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <span class="font-bold text-slate-300">Pêndulo / swing</span>
+                <p class="text-slate-400 mt-1">
+                  Município competitivo onde os dois candidatos estão próximos.
+                  É onde a eleição se decide.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main
+      class="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8 space-y-10 sm:space-y-12 scroll-mt-28 sm:scroll-mt-20"
+      id="simulador"
+    >
+      <!-- Painel de Controle e Sliders -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Coluna de Sliders (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div
+            class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-2.5 sm:gap-2 border-b border-slate-800 pb-3"
+          >
+            <div>
+              <h2
+                class="text-lg sm:text-xl font-bold text-white flex items-center gap-2"
+              >
+                <span>⚙️</span> Painel de Transferência de Votos
+              </h2>
+              <p class="text-xs text-slate-400">
+                Ajuste os parâmetros para simular o resultado em tempo real
+              </p>
+            </div>
+
+            <!-- Presets -->
+            <div
+              class="-mx-1 flex gap-1.5 overflow-x-auto custom-scrollbar px-1 pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0"
+            >
+              <button
+                onclick="applyPreset('central')"
+                class="shrink-0 whitespace-nowrap text-xs px-3 py-2 min-h-[40px] rounded bg-slate-800 active:bg-slate-700 text-slate-200 transition"
+                title="Premissa neutra: cada bloco vai para onde o histórico espacial indica"
+              >
+                Central
+              </button>
+              <button
+                onclick="applyPreset('empate')"
+                class="shrink-0 whitespace-nowrap text-xs px-3 py-2 min-h-[40px] rounded bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/30 transition"
+                title="Cury e Renan capturados em massa por Lula"
+              >
+                Equilíbrio
+              </button>
+              <button
+                onclick="applyPreset('lula')"
+                class="shrink-0 whitespace-nowrap text-xs px-3 py-2 min-h-[40px] rounded bg-red-500/20 active:bg-red-500/30 text-red-300 border border-red-500/30 transition"
+                title="Protesto vira Lula + base de Flávio fissura + Nordeste mobilizado"
+              >
+                Onda Lula
+              </button>
+              <button
+                onclick="applyPreset('flavio')"
+                class="shrink-0 whitespace-nowrap text-xs px-3 py-2 min-h-[40px] rounded bg-blue-500/20 active:bg-blue-500/30 text-blue-300 border border-blue-500/30 transition"
+                title="Direita se consolida, base do Flávio coesa"
+              >
+                Consolidação Direita
+              </button>
+              <button
+                id="btn-apply-ai"
+                onclick="applyAiParams()"
+                class="shrink-0 whitespace-nowrap hidden text-xs px-3 py-2 min-h-[40px] rounded bg-violet-500/20 active:bg-violet-500/30 text-violet-300 border border-violet-500/30 transition"
+                title="Aplica os parâmetros sugeridos pela IA a partir das notícias"
+              >
+                ✨ Aplicar sugestão da IA
+              </button>
+            </div>
+          </div>
+
+          <!-- Explicacao dos blocos de sliders -->
+          <div
+            class="bg-slate-800/40 rounded-xl p-4 border border-slate-700/60 text-sm text-slate-300"
+          >
+            <p class="mb-3">
+              <strong class="text-white">Como usar este painel:</strong> cada
+              controle abaixo simula uma hipótese sobre para onde vai um grupo
+              específico de pessoas. Mova as barras e o placar do topo muda na
+              hora. Não existe resposta certa — o objetivo é
+              <em>ver o quanto o resultado é sensível</em> a cada suposição.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <span class="font-bold text-amber-400">🟡 Voto de protesto</span
+                ><br />Cury e Renan Santos:
+                <strong id="lbl-protesto-millions">—</strong> de pessoas que
+                votaram "contra os dois" e agora precisam escolher. É o maior
+                bloco de indefinidos.
+              </div>
+              <div>
+                <span class="font-bold text-blue-400">🔵 Centro-direita</span
+                ><br />Caiado e Zema:
+                <strong id="lbl-centro-millions">—</strong> de votos de direita
+                que historicamente migram para o PL.
+              </div>
+              <div>
+                <span class="font-bold text-purple-400"
+                  >🟣 Coesão das bases</span
+                ><br />Quanto cada candidato mantém do próprio exército. Aqui
+                está o maior risco para Flávio, que vota pela primeira vez.
+              </div>
+            </div>
+          </div>
+
+          <!-- Grupo 1: O Voto de Protesto (Cury + Renan) -->
+          <div
+            class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80 space-y-4"
+          >
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3
+                class="text-sm font-bold text-slate-200 flex items-start sm:items-center gap-2 min-w-0"
+              >
+                <span
+                  class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0 mt-1 sm:mt-0"
+                ></span>
+                <span class="min-w-0"
+                  >Voto de Protesto &amp; Terceira Via (<span
+                    id="lbl-protesto-total"
+                    >—</span
+                  >)</span
+                >
+              </h3>
+              <span
+                class="shrink-0 text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-mono"
+                >Decisivo</span
+              >
+            </div>
+
+            <!-- Slider Augusto Cury -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-slate-300"
+                  >Augusto Cury (Avante ·
+                  <span id="lbl-votes-cury">—</span> votos)</span
+                >
+                <span id="val-cury" class="font-mono text-amber-400 font-bold"
+                  >44% Lula / 56% Flávio</span
+                >
+              </div>
+              <input
+                type="range"
+                id="slider-cury"
+                min="0"
+                max="100"
+                value="44"
+                step="1"
+                class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              />
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>0% Lula (100% Flávio)</span>
+                <span>44% (Cenário Central)</span>
+                <span>100% Lula</span>
+              </div>
+            </div>
+
+            <!-- Slider Renan Santos -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-slate-300"
+                  >Renan Santos (Missão ·
+                  <span id="lbl-votes-renan">—</span> votos)</span
+                >
+                <span id="val-renan" class="font-mono text-amber-400 font-bold"
+                  >38% Lula / 62% Flávio</span
+                >
+              </div>
+              <input
+                type="range"
+                id="slider-renan"
+                min="0"
+                max="100"
+                value="38"
+                step="1"
+                class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              />
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>0% Lula</span>
+                <span>38% (Cenário Central)</span>
+                <span>100% Lula</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grupo 2: A Centro-Direita Institucional -->
+          <div
+            class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80 space-y-4"
+          >
+            <div class="flex items-center justify-between">
+              <h3
+                class="text-sm font-bold text-slate-200 flex items-center gap-2"
+              >
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                Centro-Direita Eliminada (<span id="lbl-centro-dir-total"
+                  >—</span
+                >)
+              </h3>
+            </div>
+
+            <!-- Slider Caiado -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-slate-300"
+                  >Ronaldo Caiado (PSD ·
+                  <span id="lbl-votes-caiado">—</span> votos)</span
+                >
+                <span id="val-caiado" class="font-mono text-blue-400 font-bold"
+                  >11% Lula / 89% Flávio</span
+                >
+              </div>
+              <input
+                type="range"
+                id="slider-caiado"
+                min="0"
+                max="100"
+                value="11"
+                step="1"
+                class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              />
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>0% Lula</span>
+                <span>11% (Aliado histórico de Bolsonaro)</span>
+                <span>100% Lula</span>
+              </div>
+            </div>
+
+            <!-- Slider Zema -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-slate-300"
+                  >Romeu Zema (Novo ·
+                  <span id="lbl-votes-zema">—</span> votos)</span
+                >
+                <span id="val-zema" class="font-mono text-blue-400 font-bold"
+                  >8% Lula / 92% Flávio</span
+                >
+              </div>
+              <input
+                type="range"
+                id="slider-zema"
+                min="0"
+                max="100"
+                value="8"
+                step="1"
+                class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <!-- Grupo 3: Coesão das Bases Principais -->
+          <div
+            class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80 space-y-4"
+          >
+            <div class="flex items-center justify-between">
+              <h3
+                class="text-sm font-bold text-slate-200 flex items-center gap-2"
+              >
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+                Coesão e Desvio das Bases do 1º Turno
+              </h3>
+              <span
+                class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-mono"
+                >Alta Sensibilidade</span
+              >
+            </div>
+
+            <!-- Slider Fissura Base Flávio -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-slate-300"
+                  >Desvio da Base de Flávio para Lula</span
+                >
+                <span
+                  id="val-flav-def"
+                  class="font-mono text-purple-400 font-bold"
+                  >5,0% (2,8M votos p/ Lula)</span
+                >
+              </div>
+              <input
+                type="range"
+                id="slider-flav-def"
+                min="0"
+                max="15"
+                value="5"
+                step="0.2"
+                class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              />
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>0% (Fidelidade cega)</span>
+                <span class="text-amber-400 font-medium"
+                  >7,6% (Ponto de Virada de Lula)</span
+                >
+                <span>15%</span>
+              </div>
+            </div>
+
+            <!-- Slider Retenção Base Lula -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-slate-300"
+                  >Retenção da Base Própria de Lula</span
+                >
+                <span
+                  id="val-lula-ret"
+                  class="font-mono text-purple-400 font-bold"
+                  >97,5%</span
+                >
+              </div>
+              <input
+                type="range"
+                id="slider-lula-ret"
+                min="90"
+                max="100"
+                value="97.5"
+                step="0.5"
+                class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              />
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>90%</span>
+                <span>97,5% (Central)</span>
+                <span>100% (Histórico 2022: 99,85%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grupo 4: Comparecimento Regional -->
+          <div
+            class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80 space-y-4"
+          >
+            <div class="flex items-center justify-between">
+              <h3
+                class="text-sm font-bold text-slate-200 flex items-center gap-2"
+              >
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                Mobilização Regional de Comparecimento
+              </h3>
+              <span class="text-xs text-slate-400">Elasticidade de urnas</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs">
+                  <span>Nordeste (43,5M)</span>
+                  <span
+                    id="val-comp-ne"
+                    class="font-mono font-bold text-emerald-400"
+                    >0.0%</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  id="slider-comp-ne"
+                  min="-5"
+                  max="5"
+                  value="0"
+                  step="0.5"
+                  class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                />
+                <div class="text-[10px] text-slate-500 flex justify-between">
+                  <span>-5%</span><span>+135k/p.p</span><span>+5%</span>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs">
+                  <span>Sudeste (66,3M)</span>
+                  <span
+                    id="val-comp-se"
+                    class="font-mono font-bold text-emerald-400"
+                    >0.0%</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  id="slider-comp-se"
+                  min="-5"
+                  max="5"
+                  value="0"
+                  step="0.5"
+                  class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                />
+                <div class="text-[10px] text-slate-500 flex justify-between">
+                  <span>-5%</span><span>-73k/p.p</span><span>+5%</span>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs">
+                  <span>Sul (22,9M)</span>
+                  <span
+                    id="val-comp-s"
+                    class="font-mono font-bold text-emerald-400"
+                    >0.0%</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  id="slider-comp-s"
+                  min="-5"
+                  max="5"
+                  value="0"
+                  step="0.5"
+                  class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                />
+                <div class="text-[10px] text-slate-500 flex justify-between">
+                  <span>-5%</span><span>-63k/p.p</span><span>+5%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna de Gráficos e Decomposição (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          <!-- Gráfico Comparativo 1T vs 2T -->
+          <div class="bg-slate-900/90 rounded-2xl border border-slate-800 p-5">
+            <h3 class="text-sm font-bold text-slate-200 mb-1">
+              Evolução de Votos: 1º vs 2º Turno
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">
+              Milhões de votos válidos projetados
+            </p>
+            <div class="h-52 sm:h-64 relative">
+              <canvas id="chart-comparison"></canvas>
+            </div>
+          </div>
+
+          <!-- Decomposição das Coalizões -->
+          <div class="bg-slate-900/90 rounded-2xl border border-slate-800 p-5">
+            <h3 class="text-sm font-bold text-slate-200 mb-1">
+              Origem dos Votos no 2º Turno
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">
+              Composição de cada candidato por bloco de origem
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <div
+                  class="text-xs font-semibold text-center text-blue-400 mb-2"
+                >
+                  Flávio Bolsonaro
+                </div>
+                <div class="h-36 sm:h-44 relative">
+                  <canvas id="chart-sources-flavio"></canvas>
+                </div>
+              </div>
+              <div>
+                <div
+                  class="text-xs font-semibold text-center text-red-400 mb-2"
+                >
+                  Lula
+                </div>
+                <div class="h-36 sm:h-44 relative">
+                  <canvas id="chart-sources-lula"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção: Matriz 2D de Decisão (Fronteira Crítica) -->
+      <section
+        id="matriz"
+        class="border-t border-slate-800 pt-10 scroll-mt-28 sm:scroll-mt-20"
+      >
+        <div class="mb-6">
+          <div
+            class="flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-wider"
+          >
+            <span>Análise de Sensibilidade Bivariada</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+            A Matriz 2D da Vitória
+          </h2>
+          <p class="text-sm text-slate-400 max-w-3xl mt-1">
+            Esta é a tabela mais importante do site. Ela mostra
+            <strong class="text-white">quantas combinações de cenários</strong>
+            levam a Flávio e quantas levam a Lula.
+          </p>
+          <div
+            class="mt-3 bg-slate-900/70 rounded-xl p-4 text-sm text-slate-300 max-w-3xl border-l-4 border-blue-500"
+          >
+            <p class="mb-2"><strong class="text-white">Para ler:</strong></p>
+            <ul class="space-y-1.5 text-sm">
+              <li>
+                <span class="text-blue-400 font-bold">↓ Linhas (vertical)</span>
+                — quanto do voto do <strong>Flávio</strong> vai para o Lula.
+                Começa em 2% (fidelidade alta) e vai até 12%.
+              </li>
+              <li>
+                <span class="text-amber-400 font-bold"
+                  >→ Colunas (horizontal)</span
+                >
+                — quanto do voto de <strong>Cury e Renan</strong> (o "protesto")
+                vai para o Lula. De 20% a 80%.
+              </li>
+              <li>
+                <span class="text-slate-400 font-bold">Cada célula</span> —
+                mostra em milhões de votos quantos o Lula ganha (número
+                <strong class="text-red-400">positivo</strong>, prefixo +) ou
+                quantos o Flávio ganha (número
+                <strong class="text-blue-400">negativo</strong>).
+              </li>
+              <li>
+                <span class="text-amber-300 font-bold">Borda amarela</span> —
+                marca a célula que corresponde ao que você sliders definiram
+                agora.
+              </li>
+            </ul>
+            <p class="mt-2 text-slate-400 text-sm">
+              <strong>Como usar:</strong> procure a linha "5%" (desvio base do
+              Flávio). Se ela estiver vermelha, precisa quase todo o voto de
+              protesto. Depois verifique a linha "7%": se já estiver vermelha, a
+              base do Flávio rachando é suficiente sozinho.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="scroll-hint overflow-x-auto bg-slate-900/90 rounded-2xl border border-slate-800 p-3 sm:p-4 custom-scrollbar"
+        >
+          <table class="w-full text-center text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400">
+                <th
+                  class="p-2 sm:p-2.5 text-left font-bold text-slate-300 bg-slate-950/95 sm:bg-slate-950/60 sticky left-0 z-10 border-r border-slate-800 whitespace-nowrap"
+                >
+                  <span class="sm:hidden block leading-tight">
+                    <span class="text-blue-400">Flávio ↓</span>
+                    <span class="text-slate-500">/</span>
+                    <span class="text-amber-400">Protesto →</span>
+                  </span>
+                  <span class="hidden sm:inline">Desvio Flávio ↓ \ Protesto Lula →</span>
+                </th>
+                <th class="p-2.5 font-semibold">20%</th>
+                <th class="p-2.5 font-semibold">30%</th>
+                <th class="p-2.5 font-semibold">40%</th>
+                <th class="p-2.5 font-semibold">45%</th>
+                <th class="p-2.5 font-semibold">50%</th>
+                <th class="p-2.5 font-semibold">55%</th>
+                <th class="p-2.5 font-semibold">60%</th>
+                <th class="p-2.5 font-semibold">70%</th>
+                <th class="p-2.5 font-semibold">80%</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-tbody" class="divide-y divide-slate-800/60">
+              <!-- Gerado via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="flex flex-wrap items-center justify-between text-xs text-slate-400 mt-3 px-2 gap-2"
+        >
+          <div class="flex items-center gap-4">
+            <span class="flex items-center gap-1.5"
+              ><span
+                class="w-3 h-3 rounded bg-blue-900/50 border border-blue-500/40"
+              ></span>
+              Vitória de Flávio</span
+            >
+            <span class="flex items-center gap-1.5"
+              ><span
+                class="w-3 h-3 rounded bg-red-900/50 border border-red-500/40"
+              ></span>
+              Vitória de Lula</span
+            >
+            <span class="flex items-center gap-1.5"
+              ><span class="w-3 h-3 rounded border-2 border-amber-400"></span>
+              Ponto Atual</span
+            >
+          </div>
+          <span>Valores em milhões de votos (Margem Lula − Flávio)</span>
+        </div>
+      </section>
+
+      <!-- Seção: Os 6 Arquétipos Eleitorais Municipais -->
+      <section class="border-t border-slate-800 pt-10">
+        <div class="mb-6">
+          <div
+            class="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider"
+          >
+            <span>Clusterização de 5.710 Municípios</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+            Os Baluartes e o Pêndulo Brasileiro
+          </h2>
+          <p class="text-sm text-slate-400 max-w-3xl mt-1">
+            O Brasil não é uniforme. Agrupamos os 5.710 municípios em 6 perfis
+            eleitorais claros. Observe a simetria impressionante entre o
+            Baluarte Lulista e o Bolsonarista (ambos com ~23M de votos válidos).
+          </p>
+        </div>
+
+        <div
+          class="bg-slate-900/70 rounded-xl p-4 mb-6 text-sm text-slate-300 border-l-4 border-emerald-500"
+        >
+          <p>
+            <strong class="text-white">O que são esses grupos?</strong> Cada
+            município foi classificado pelo jeito que votou em outubro. Pense
+            neles como "tipos de lugar" do eleitorado brasileiro — cada grupo
+            tem um comportamento diferente:
+          </p>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-3 text-xs"
+          >
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <span class="font-bold text-red-400">Baluarte Lulista</span
+              ><br />Cidades do interior do Nordeste e do semiárido onde Lula
+              ganha de lavada. Voto quase sempre igual.
+              <em>Pouco importa o que acontecer na campanha.</em>
+            </div>
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <span class="font-bold text-blue-400">Baluarte Bolsonarista</span
+              ><br />Interior do Centro-Oeste, Sul e São Paulo onde Flávio ganha
+              sempre. Também é voto fiel.
+            </div>
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <span class="font-bold text-slate-200">Pêndulo Competitivo</span
+              ><br />Grandes capitais (SP, RJ, BH, POA…) onde os dois candidatos
+              empatam.
+              <strong class="text-amber-300">Aqui se decide a eleição.</strong>
+            </div>
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <span class="font-bold text-blue-300">Cinturão Caiadista</span
+              ><br />Municípios de Goiás e Minas onde Caiado (PSD) teve 10%+ — o
+              voto de centro-direita.
+            </div>
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <span class="font-bold text-amber-400">Foco de Protesto</span
+              ><br />Cidades onde Cury e Renan passaram de 8%. Voto de protesto
+              mais forte.
+            </div>
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <span class="font-bold text-slate-300"
+                >Intermediário / Demais</span
+              ><br />Todos os outros: resultado moderado, sem nenhum dos dois em
+              extremos.
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          id="clusters-container"
+        >
+          <!-- Gerado via JS -->
+        </div>
+      </section>
+
+      <!-- Seção: Agente de IA (notícias em tempo real) -->
+      <section
+        id="ia"
+        class="border-t border-slate-800 pt-10 scroll-mt-28 sm:scroll-mt-20"
+      >
+        <div class="mb-6">
+          <div
+            class="flex items-center gap-2 text-xs font-bold text-violet-400 uppercase tracking-wider"
+          >
+            <span
+              class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-pulse"
+            ></span>
+            <span>Agente Automático · Atualiza a cada 1 hora</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+            🤖 O que as notícias estão dizendo agora
+          </h2>
+          <p class="text-sm text-slate-400 max-w-3xl mt-1">
+            Um modelo de inteligência artificial lê as notícias sobre a eleição
+            publicados nas últimas horas, interpreta o momento político e sugere
+            ajustes nos parâmetros do simulador.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Coluna 1: Análise -->
+          <div class="lg:col-span-2 space-y-4">
+            <div
+              class="bg-slate-900/90 rounded-2xl border border-slate-800 p-5"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-white">Leitura do cenário</h3>
+                <span
+                  id="ai-timestamp"
+                  class="text-[11px] text-slate-500 font-mono"
+                  >carregando…</span
+                >
+              </div>
+              <div
+                id="ai-loading"
+                class="text-sm text-slate-500 py-6 text-center"
+              >
+                <div class="inline-block animate-pulse">
+                  Consultando notícias e acionando o modelo de IA…
+                </div>
+              </div>
+              <div id="ai-content" class="hidden space-y-4">
+                <p
+                  id="ai-clima"
+                  class="text-sm text-slate-300 leading-relaxed"
+                ></p>
+
+                <div>
+                  <h4
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                  >
+                    O que apareceu nas notícias
+                  </h4>
+                  <ul
+                    id="ai-destaques"
+                    class="space-y-2 text-sm text-slate-300"
+                  ></ul>
+                </div>
+
+                <div class="bg-slate-800/50 rounded-lg p-3">
+                  <h4
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5"
+                  >
+                    Por que a IA sugeriu esses valores
+                  </h4>
+                  <p
+                    id="ai-justificativa"
+                    class="text-sm text-slate-300 leading-relaxed"
+                  ></p>
+                </div>
+
+                <div
+                  class="bg-slate-800/50 rounded-lg p-3 border-l-4 border-violet-500"
+                >
+                  <h4
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5"
+                  >
+                    Resumo da projeção
+                  </h4>
+                  <p
+                    id="ai-projecao"
+                    class="text-sm text-slate-300 leading-relaxed"
+                  ></p>
+                </div>
+              </div>
+              <div
+                id="ai-error"
+                class="hidden text-sm text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded-lg p-3"
+              >
+                Não foi possível carregar a análise de IA.
+                <span id="ai-error-msg" class="text-amber-300"></span>
+                <br /><span class="text-slate-400 text-xs"
+                  >O simulador continua funcionando normalmente com os
+                  parâmetros manuais.</span
+                >
+              </div>
+            </div>
+
+            <!-- Comparativo de parâmetros -->
+            <div
+              class="bg-slate-900/90 rounded-2xl border border-slate-800 p-5"
+            >
+              <h3 class="text-sm font-bold text-white mb-3">
+                Parâmetros sugeridos pela IA vs. cenário central
+              </h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-xs">
+                  <thead>
+                    <tr class="text-slate-400 border-b border-slate-800">
+                      <th class="text-left py-2">Parâmetro</th>
+                      <th class="text-right py-2">Central</th>
+                      <th class="text-right py-2">Sugerido pela IA</th>
+                      <th class="text-right py-2">Δ</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="ai-params-tbody"
+                    class="divide-y divide-slate-800/60"
+                  ></tbody>
+                </table>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-3">
+                A IA apenas <em>sugere</em>. Você decide se quer aplicar —
+                clique em
+                <strong class="text-violet-300"
+                  >"✨ Aplicar sugestão da IA"</strong
+                >
+                no painel acima para mover os controles.
+              </p>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Notícias -->
+          <div class="bg-slate-900/90 rounded-2xl border border-slate-800 p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-bold text-white">Notícias coletadas</h3>
+              <button
+                id="btn-refresh-ai"
+                onclick="refreshAiAnalysis()"
+                class="text-[11px] px-3 py-2 min-h-[40px] rounded bg-slate-800 active:bg-slate-700 text-slate-300 transition shrink-0"
+              >
+                ↻ Atualizar
+              </button>
+            </div>
+            <div
+              id="ai-news-list"
+              class="space-y-3 max-h-[32rem] overflow-y-auto custom-scrollbar pr-1"
+            >
+              <div class="text-sm text-slate-500 text-center py-6">
+                Carregando notícias…
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção: Municípios mais Decisivos -->
+      <section
+        id="municipios"
+        class="border-t border-slate-800 pt-10 scroll-mt-28 sm:scroll-mt-20"
+      >
+        <div class="flex flex-wrap justify-between items-end gap-4 mb-6">
+          <div>
+            <div
+              class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider"
+            >
+              <span>Campos de Batalha Urbanos</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+              Onde Estão os Votos de Protesto
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">
+              Os 100 maiores municípios que concentram o maior volume de votos
+              indefinidos (Cury + Renan)
+            </p>
+          </div>
+
+          <!-- Filtros de Busca -->
+          <div class="flex w-full sm:w-auto items-center gap-2 sm:gap-3">
+            <input
+              type="text"
+              id="mun-search"
+              placeholder="Buscar município..."
+              class="flex-1 sm:flex-none min-w-0 sm:w-48 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 sm:py-1.5 text-base sm:text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+            />
+            <select
+              id="mun-filter-uf"
+              class="shrink-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-3 sm:py-1.5 text-base sm:text-xs text-slate-200 focus:outline-none focus:border-blue-500 min-h-[40px]"
+            >
+              <option value="ALL">Todas as UFs</option>
+            </select>
+          </div>
+        </div>
+
+        <div
+          class="scroll-hint overflow-x-auto bg-slate-900/90 rounded-2xl border border-slate-800 custom-scrollbar max-h-[70vh] sm:max-h-96"
+        >
+          <table class="w-full text-left text-xs border-collapse">
+            <thead
+              class="sticky top-0 bg-slate-900 border-b border-slate-800 text-slate-400 z-10"
+            >
+              <tr>
+                <th class="p-3 font-semibold">Município / UF</th>
+                <th class="p-3 font-semibold text-right">Votos Válidos</th>
+                <th class="p-3 font-semibold text-right">Comparecimento</th>
+                <th class="p-3 font-semibold text-right">Margem 1T</th>
+                <th class="p-3 font-semibold text-right text-amber-400">
+                  Protesto (Cury+Renan)
+                </th>
+                <th class="p-3 font-semibold text-right text-blue-400">
+                  Caiado (PSD)
+                </th>
+                <th class="p-3 font-semibold text-right">Total Indefinido</th>
+              </tr>
+            </thead>
+            <tbody
+              id="muns-tbody"
+              class="divide-y divide-slate-800 text-slate-300"
+            >
+              <!-- Gerado via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="border-t border-slate-800 bg-slate-950 py-8 px-4 mt-12 text-center text-xs text-slate-500"
+    >
+      <div class="max-w-7xl mx-auto space-y-2">
+        <p>
+          Dados oficiais extraídos diretamente do Tribunal Superior Eleitoral
+          (TSE) · Eleição 6257 (1º Turno 2026)
+        </p>
+        <p>
+          12.078 endpoints auditados com 0 erros • Validação de consistência
+          exata contra totalização nacional
+        </p>
+        <p class="text-slate-600">
+          Desenvolvido por
+          <strong class="text-slate-400">Pedro Farias</strong> com Kilo Agentic
+          Suite
+          <span class="text-slate-700"> • </span>
+          Metodologia de Inferência Ecológica e Simulação Monte Carlo
+        </p>
+      </div>
+    </footer>
+
+    <!-- Botão "voltar ao topo" — aparece só no mobile, após rolar -->
+    <button
+      id="btn-topo"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      aria-label="Voltar ao topo"
+      class="fixed bottom-4 right-4 z-40 sm:hidden w-12 h-12 rounded-full bg-blue-600/90 active:bg-blue-500 border border-blue-400/40 text-white text-xl font-bold shadow-lg shadow-black/50 flex items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none"
+    >
+      ↑
+    </button>
+
+    <!-- Simulation Logic & Charts script -->
+    <script>
+      const D = window.TSE_DATA;
+
+      // Elements
+      const elPctFlavio = document.getElementById("pct-flavio");
+      const elVotesFlavio = document.getElementById("votes-flavio");
+      const elBarFlavio = document.getElementById("bar-flavio");
+      const elDiffFlavio = document.getElementById("diff-flavio");
+      const elBadgeFlavio = document.getElementById("badge-winner-flavio");
+
+      const elPctLula = document.getElementById("pct-lula");
+      const elVotesLula = document.getElementById("votes-lula");
+      const elBarLula = document.getElementById("bar-lula");
+      const elDiffLula = document.getElementById("diff-lula");
+      const elBadgeLula = document.getElementById("badge-winner-lula");
+
+      const elMetricMargin = document.getElementById("metric-margin");
+      const elMetricTotalValid = document.getElementById("metric-total-valid");
+      const elMetricTurnout = document.getElementById("metric-turnout");
+      const elMetricProb = document.getElementById("metric-prob");
+
+      // Sliders
+      const sCury = document.getElementById("slider-cury");
+      const sRenan = document.getElementById("slider-renan");
+      const sCaiado = document.getElementById("slider-caiado");
+      const sZema = document.getElementById("slider-zema");
+      const sFlavDef = document.getElementById("slider-flav-def");
+      const sLulaRet = document.getElementById("slider-lula-ret");
+      const sCompNE = document.getElementById("slider-comp-ne");
+      const sCompSE = document.getElementById("slider-comp-se");
+      const sCompS = document.getElementById("slider-comp-s");
+
+      // Values display
+      const valCury = document.getElementById("val-cury");
+      const valRenan = document.getElementById("val-renan");
+      const valCaiado = document.getElementById("val-caiado");
+      const valZema = document.getElementById("val-zema");
+      const valFlavDef = document.getElementById("val-flav-def");
+      const valLulaRet = document.getElementById("val-lula-ret");
+      const valCompNE = document.getElementById("val-comp-ne");
+      const valCompSE = document.getElementById("val-comp-se");
+      const valCompS = document.getElementById("val-comp-s");
+
+      const fmt = (n) => Math.round(n).toLocaleString("pt-BR");
+
+      // Preenche os rótulos com os totais oficiais vindos do TSE (nunca hard-coded)
+      function hydrateLabels() {
+        const P = D.pesos;
+        const cand = (key) =>
+          (D.candidatos.find((c) => c.chave === key) || {}).votos || 0;
+        const prot = P.cury + P.renan;
+        const centro = P.caiado + P.zema;
+
+        const set = (id, txt) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = txt;
+        };
+
+        set(
+          "lbl-1t-flavio",
+          `1º Turno: ${fmt(P.flav)} (${((P.flav / D.br.vv) * 100).toFixed(2).replace(".", ",")}%)`,
+        );
+        set(
+          "lbl-1t-lula",
+          `1º Turno: ${fmt(P.lula)} (${((P.lula / D.br.vv) * 100).toFixed(2).replace(".", ",")}%)`,
+        );
+
+        set("lbl-votes-cury", fmt(cand("70")));
+        set("lbl-votes-renan", fmt(cand("14")));
+        set("lbl-votes-caiado", fmt(cand("55")));
+        set("lbl-votes-zema", fmt(cand("30")));
+
+        set(
+          "lbl-protesto-total",
+          `${fmt(prot)} votos · ${((prot / D.br.vv) * 100).toFixed(2).replace(".", ",")}%`,
+        );
+        set(
+          "lbl-centro-dir-total",
+          `${fmt(centro)} votos · ${((centro / D.br.vv) * 100).toFixed(2).replace(".", ",")}%`,
+        );
+        set(
+          "lbl-protesto-millions",
+          `${(prot / 1e6).toFixed(1).replace(".", ",")} milhões`,
+        );
+        set(
+          "lbl-centro-millions",
+          `${(centro / 1e6).toFixed(1).replace(".", ",")} milhões`,
+        );
+      }
+
+      // Charts instances
+      let chartComparison = null;
+      let chartSourcesFlavio = null;
+      let chartSourcesLula = null;
+
+      function initCharts() {
+        // Comparison chart
+        const ctxComp = document
+          .getElementById("chart-comparison")
+          .getContext("2d");
+        chartComparison = new Chart(ctxComp, {
+          type: "bar",
+          data: {
+            labels: ["1º Turno (Oficial)", "2º Turno (Simulado)"],
+            datasets: [
+              {
+                label: "Flávio Bolsonaro",
+                data: [D.pesos.flav / 1e6, 59.15],
+                backgroundColor: "#2563eb",
+                borderRadius: 6,
+              },
+              {
+                label: "Lula",
+                data: [D.pesos.lula / 1e6, 56.23],
+                backgroundColor: "#ef4444",
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
+              tooltip: {
+                callbacks: {
+                  label: (c) =>
+                    `${c.dataset.label}: ${c.raw.toFixed(2)}M votos`,
+                },
+              },
+            },
+            scales: {
+              x: { ticks: { color: "#94a3b8" }, grid: { display: false } },
+              y: {
+                ticks: { color: "#94a3b8", callback: (v) => v + "M" },
+                grid: { color: "#1e293b" },
+                title: {
+                  display: true,
+                  text: "Milhões de Votos",
+                  color: "#64748b",
+                },
+              },
+            },
+          },
+        });
+
+        // Doughnut Flavio
+        const ctxF = document
+          .getElementById("chart-sources-flavio")
+          .getContext("2d");
+        chartSourcesFlavio = new Chart(ctxF, {
+          type: "doughnut",
+          data: {
+            labels: ["Base Própria", "Caiado", "Cury/Renan", "Outros/Nulos"],
+            datasets: [
+              {
+                data: [51, 2.3, 2.6, 3.2],
+                backgroundColor: ["#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            cutout: "65%",
+          },
+        });
+
+        // Doughnut Lula
+        const ctxL = document
+          .getElementById("chart-sources-lula")
+          .getContext("2d");
+        chartSourcesLula = new Chart(ctxL, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Base Própria",
+              "Desvio Flávio",
+              "Cury/Renan",
+              "Outros/Nulos",
+            ],
+            datasets: [
+              {
+                data: [49.5, 2.8, 2.4, 1.5],
+                backgroundColor: ["#b91c1c", "#dc2626", "#ef4444", "#f87171"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            cutout: "65%",
+          },
+        });
+      }
+
+      // Simulation calculation
+      function recalculate() {
+        const pCury = parseFloat(sCury.value) / 100;
+        const pRenan = parseFloat(sRenan.value) / 100;
+        const pCaiado = parseFloat(sCaiado.value) / 100;
+        const pZema = parseFloat(sZema.value) / 100;
+        const flavDef = parseFloat(sFlavDef.value) / 100;
+        const lulaRet = parseFloat(sLulaRet.value) / 100;
+        const dCompNE = parseFloat(sCompNE.value);
+        const dCompSE = parseFloat(sCompSE.value);
+        const dCompS = parseFloat(sCompS.value);
+
+        // Update labels
+        valCury.textContent = `${sCury.value}% Lula / ${100 - sCury.value}% Flávio`;
+        valRenan.textContent = `${sRenan.value}% Lula / ${100 - sRenan.value}% Flávio`;
+        valCaiado.textContent = `${sCaiado.value}% Lula / ${100 - sCaiado.value}% Flávio`;
+        valZema.textContent = `${sZema.value}% Lula / ${100 - sZema.value}% Flávio`;
+        valFlavDef.textContent = `${parseFloat(sFlavDef.value).toFixed(1)}% (${fmt(D.pesos.flav * 0.958 * flavDef)} votos p/ Lula)`;
+        valLulaRet.textContent = `${parseFloat(sLulaRet.value).toFixed(1)}%`;
+        valCompNE.textContent = `${dCompNE > 0 ? "+" : ""}${dCompNE.toFixed(1)}%`;
+        valCompSE.textContent = `${dCompSE > 0 ? "+" : ""}${dCompSE.toFixed(1)}%`;
+        valCompS.textContent = `${dCompS > 0 ? "+" : ""}${dCompS.toFixed(1)}%`;
+
+        // Vote pools calculation
+        // 1. Lula base
+        const actLula = D.pesos.lula * 0.965;
+        const lFromLula = actLula * lulaRet;
+        const fFromLula = actLula * (1 - lulaRet);
+
+        // 2. Flávio base
+        const actFlav = D.pesos.flav * 0.958;
+        const lFromFlav = actFlav * flavDef;
+        const fFromFlav = actFlav * (1 - flavDef);
+
+        // 3. Cury
+        const actCury = D.pesos.cury * 0.72;
+        const lFromCury = actCury * pCury;
+        const fFromCury = actCury * (1 - pCury);
+
+        // 4. Renan
+        const actRenan = D.pesos.renan * 0.72;
+        const lFromRenan = actRenan * pRenan;
+        const fFromRenan = actRenan * (1 - pRenan);
+
+        // 5. Caiado
+        const actCaiado = D.pesos.caiado * 0.915;
+        const lFromCaiado = actCaiado * pCaiado;
+        const fFromCaiado = actCaiado * (1 - pCaiado);
+
+        // 6. Zema
+        const actZema = D.pesos.zema * 0.9;
+        const lFromZema = actZema * pZema;
+        const fFromZema = actZema * (1 - pZema);
+
+        // 7. Esquerda periférica (constante)
+        const actEsq = D.pesos.esq * 0.935;
+        const lFromEsq = actEsq * 0.94;
+        const fFromEsq = actEsq * 0.06;
+
+        // 8. DC / Dem (constante)
+        const actDC = D.pesos.dc * 0.86;
+        const lFromDC = actDC * 0.488;
+        const fFromDC = actDC * 0.512;
+
+        // 9. Brancos e Nulos
+        const actBr = D.pesos.branco * 0.28;
+        const lFromBr = actBr * 0.31;
+        const fFromBr = actBr * 0.69;
+
+        const actNl = D.pesos.nulo * 0.6;
+        const lFromNl = actNl * 0.332;
+        const fFromNl = actNl * 0.668;
+
+        // Regional Turnout adjustments
+        // Nordeste (+1 p.p. = +135.457 votos líquidos para Lula)
+        // Sudeste (+1 p.p. = -73.350 votos líquidos para Lula)
+        // Sul (+1 p.p. = -63.394 votos líquidos para Lula)
+        const deltaNE = dCompNE * 135457;
+        const deltaSE = dCompSE * -73350;
+        const deltaS = dCompS * -63394;
+
+        let totLula =
+          lFromLula +
+          lFromFlav +
+          lFromCury +
+          lFromRenan +
+          lFromCaiado +
+          lFromZema +
+          lFromEsq +
+          lFromDC +
+          lFromBr +
+          lFromNl +
+          (deltaNE > 0 ? deltaNE * 0.64 : 0) +
+          (deltaSE > 0 ? deltaSE * 0.4 : 0) +
+          (deltaS > 0 ? deltaS * 0.31 : 0);
+        let totFlav =
+          fFromLula +
+          fFromFlav +
+          fFromCury +
+          fFromRenan +
+          fFromCaiado +
+          fFromZema +
+          fFromEsq +
+          fFromDC +
+          fFromBr +
+          fFromNl +
+          (deltaNE > 0 ? deltaNE * 0.36 : 0) +
+          (deltaSE > 0 ? deltaSE * 0.6 : 0) +
+          (deltaS > 0 ? deltaS * 0.69 : 0);
+
+        const totValid = totLula + totFlav;
+        const pctLula = (totLula / totValid) * 100;
+        const pctFlav = (totFlav / totValid) * 100;
+        const margin = totLula - totFlav;
+
+        // Render metrics
+        elPctFlavio.textContent = `${pctFlav.toFixed(2).replace(".", ",")}%`;
+        elVotesFlavio.textContent = `${fmt(totFlav)} votos`;
+        elBarFlavio.style.width = `${pctFlav.toFixed(2)}%`;
+        elDiffFlavio.textContent = `${totFlav - D.pesos.flav >= 0 ? "+" : ""}${fmt(totFlav - D.pesos.flav)} vs 1T`;
+
+        elPctLula.textContent = `${pctLula.toFixed(2).replace(".", ",")}%`;
+        elVotesLula.textContent = `${fmt(totLula)} votos`;
+        elBarLula.style.width = `${pctLula.toFixed(2)}%`;
+        elDiffLula.textContent = `${totLula - D.pesos.lula >= 0 ? "+" : ""}${fmt(totLula - D.pesos.lula)} vs 1T`;
+
+        if (margin > 0) {
+          elBadgeLula.classList.remove("hidden");
+          elBadgeFlavio.classList.add("hidden");
+          elMetricMargin.textContent = `Lula por ${fmt(margin)}`;
+          elMetricMargin.className = "text-lg font-bold text-red-400 mt-0.5";
+        } else {
+          elBadgeLula.classList.add("hidden");
+          elBadgeFlavio.classList.remove("hidden");
+          elMetricMargin.textContent = `Flávio por ${fmt(-margin)}`;
+          elMetricMargin.className = "text-lg font-bold text-blue-400 mt-0.5";
+        }
+
+        elMetricTotalValid.textContent = fmt(totValid);
+        const turnoutPct = (totValid / D.br.aptos) * 100;
+        elMetricTurnout.textContent = `${turnoutPct.toFixed(1).replace(".", ",")}% (${(totValid / 1e6).toFixed(1).replace(".", ",")}M)`;
+
+        // Approximate probability based on distance to break-even
+        if (margin > 2e6) {
+          elMetricProb.textContent = "Lula 92% · Flávio 8%";
+        } else if (margin > 5e5) {
+          elMetricProb.textContent = "Lula 68% · Flávio 32%";
+        } else if (margin > -5e5) {
+          elMetricProb.textContent = "Empate Técnico (50% / 50%)";
+        } else if (margin > -2e6) {
+          elMetricProb.textContent = "Flávio 65% · Lula 35%";
+        } else {
+          elMetricProb.textContent = "Flávio 75% · Lula 25%";
+        }
+
+        // Update charts
+        if (chartComparison) {
+          chartComparison.data.datasets[0].data[1] = totFlav / 1e6;
+          chartComparison.data.datasets[1].data[1] = totLula / 1e6;
+          chartComparison.update();
+        }
+
+        if (chartSourcesFlavio) {
+          chartSourcesFlavio.data.datasets[0].data = [
+            fFromFlav / 1e6,
+            fFromCaiado / 1e6,
+            (fFromCury + fFromRenan) / 1e6,
+            (fFromLula + fFromZema + fFromDC + fFromBr + fFromNl) / 1e6,
+          ];
+          chartSourcesFlavio.update();
+        }
+
+        if (chartSourcesLula) {
+          chartSourcesLula.data.datasets[0].data = [
+            lFromLula / 1e6,
+            lFromFlav / 1e6,
+            (lFromCury + lFromRenan) / 1e6,
+            (lFromCaiado + lFromEsq + lFromDC + lFromBr + lFromNl) / 1e6,
+          ];
+          chartSourcesLula.update();
+        }
+
+        updateMatrixHighlight(pCury, flavDef);
+      }
+
+      // Presets
+      function applyPreset(type) {
+        if (type === "central") {
+          sCury.value = 44;
+          sRenan.value = 38;
+          sCaiado.value = 11;
+          sZema.value = 8;
+          sFlavDef.value = 5.0;
+          sLulaRet.value = 97.5;
+          sCompNE.value = 0;
+          sCompSE.value = 0;
+          sCompS.value = 0;
+        } else if (type === "empate") {
+          sCury.value = 72;
+          sRenan.value = 72;
+          sCaiado.value = 11;
+          sZema.value = 8;
+          sFlavDef.value = 5.0;
+          sLulaRet.value = 97.5;
+          sCompNE.value = 0;
+          sCompSE.value = 0;
+          sCompS.value = 0;
+        } else if (type === "lula") {
+          sCury.value = 65;
+          sRenan.value = 60;
+          sCaiado.value = 25;
+          sZema.value = 12;
+          sFlavDef.value = 8.0;
+          sLulaRet.value = 98.5;
+          sCompNE.value = 2.5;
+          sCompSE.value = -1;
+          sCompS.value = -1;
+        } else if (type === "flavio") {
+          sCury.value = 25;
+          sRenan.value = 20;
+          sCaiado.value = 5;
+          sZema.value = 2;
+          sFlavDef.value = 2.5;
+          sLulaRet.value = 96.0;
+          sCompNE.value = -1;
+          sCompSE.value = 1.5;
+          sCompS.value = 1.5;
+        }
+        recalculate();
+      }
+
+      // Build 2D Matrix Table
+      function renderMatrix() {
+        const tbody = document.getElementById("matrix-tbody");
+        tbody.innerHTML = "";
+
+        D.grid_2d.forEach((row, rIdx) => {
+          const tr = document.createElement("tr");
+          const th = document.createElement("th");
+          th.className =
+            "p-2 sm:p-2.5 text-left font-bold text-slate-300 bg-slate-950/95 sm:bg-slate-950/60 sticky left-0 z-10 border-r border-slate-800 whitespace-nowrap text-[11px] sm:text-xs";
+          th.innerHTML =
+            `<span class="sm:hidden">${row.flav_defection_pct.toFixed(1)}%</span>` +
+            `<span class="hidden sm:inline">${row.flav_defection_pct.toFixed(1)}% desvio</span>`;
+          tr.appendChild(th);
+
+          row.cells.forEach((c, cIdx) => {
+            const td = document.createElement("td");
+            td.id = `cell-${rIdx}-${cIdx}`;
+            const m = c.margin_votes / 1e6;
+            const isLula = m > 0;
+            td.className = `p-2 font-mono transition-all duration-200 ${
+              isLula
+                ? "bg-red-950/40 text-red-300 hover:bg-red-900/50"
+                : "bg-blue-950/40 text-blue-300 hover:bg-blue-900/50"
+            }`;
+            td.innerHTML = `<span class="font-bold">${m > 0 ? "+" : ""}${m.toFixed(2)}M</span><br><span class="text-[10px] opacity-75">${c.winner}</span>`;
+            tr.appendChild(td);
+          });
+
+          tbody.appendChild(tr);
+        });
+      }
+
+      function updateMatrixHighlight(pProt, fDef) {
+        // Find closest col and row
+        let bestC = 0,
+          minDiffC = 999;
+        D.protest_steps.forEach((step, idx) => {
+          const diff = Math.abs(step / 100 - pProt);
+          if (diff < minDiffC) {
+            minDiffC = diff;
+            bestC = idx;
+          }
+        });
+
+        let bestR = 0,
+          minDiffR = 999;
+        D.flav_steps.forEach((step, idx) => {
+          const diff = Math.abs(step / 100 - fDef);
+          if (diff < minDiffR) {
+            minDiffR = diff;
+            bestR = idx;
+          }
+        });
+
+        // Clear previous
+        document
+          .querySelectorAll("#matrix-tbody td")
+          .forEach((td) =>
+            td.classList.remove("ring-2", "ring-amber-400", "font-black"),
+          );
+        const activeTd = document.getElementById(`cell-${bestR}-${bestC}`);
+        if (activeTd) {
+          activeTd.classList.add("ring-2", "ring-amber-400");
+        }
+      }
+
+      // Build Municipal Clusters
+      function renderClusters() {
+        const container = document.getElementById("clusters-container");
+        container.innerHTML = "";
+
+        D.clusters.forEach((cl) => {
+          const card = document.createElement("div");
+          card.className =
+            "bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-3";
+
+          const isLulaLead = cl.margem_lula_flavio > 0;
+          card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="text-sm font-bold text-white">${cl.nome}</h4>
+              <p class="text-xs text-slate-400">${cl.num_municipios.toLocaleString("pt-BR")} municípios</p>
+            </div>
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+              ${cl.pct_eleitorado_nacional.toFixed(1)}% dos votos
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs py-1 border-y border-slate-800/80">
+            <div>
+              <span class="text-slate-400">Lula 1T:</span>
+              <span class="font-bold text-red-400 ml-1">${cl.lula_pct.toFixed(1)}%</span>
+            </div>
+            <div>
+              <span class="text-slate-400">Flávio 1T:</span>
+              <span class="font-bold text-blue-400 ml-1">${cl.flavio_pct.toFixed(1)}%</span>
+            </div>
+            <div>
+              <span class="text-slate-400">Protesto:</span>
+              <span class="font-bold text-amber-400 ml-1">${cl.protesto_pct.toFixed(1)}%</span>
+            </div>
+            <div>
+              <span class="text-slate-400">Caiado:</span>
+              <span class="font-bold text-slate-300 ml-1">${cl.caiado_pct.toFixed(1)}%</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between text-[11px] text-slate-400">
+            <span>Votos válidos: ${fmt(cl.votos_validos)}</span>
+            <span>Comparecimento: ${cl.comparecimento_pct.toFixed(1)}%</span>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+      }
+
+      // Build Municipalities Table
+      function renderMunicipalities() {
+        const tbody = document.getElementById("muns-tbody");
+        const selectUF = document.getElementById("mun-filter-uf");
+        const searchInput = document.getElementById("mun-search");
+
+        // Populate UFs
+        const ufs = [...new Set(D.top_muns.map((m) => m.uf))].sort();
+        ufs.forEach((u) => {
+          const opt = document.createElement("option");
+          opt.value = u;
+          opt.textContent = u;
+          selectUF.appendChild(opt);
+        });
+
+        function filterAndDraw() {
+          const query = searchInput.value.toLowerCase().trim();
+          const ufFilter = selectUF.value;
+
+          const filtered = D.top_muns.filter((m) => {
+            const matchQuery = !query || m.nome.toLowerCase().includes(query);
+            const matchUF = ufFilter === "ALL" || m.uf === ufFilter;
+            return matchQuery && matchUF;
+          });
+
+          tbody.innerHTML = "";
+          filtered.forEach((m) => {
+            const tr = document.createElement("tr");
+            const isLula1T = m.m1p > 0;
+            tr.className = "hover:bg-slate-800/40 transition";
+            tr.innerHTML = `
+            <td class="p-3 font-medium text-white">${m.nome} <span class="text-slate-500 font-mono text-[10px]">/${m.uf}</span></td>
+            <td class="p-3 text-right font-mono">${fmt(m.vv)}</td>
+            <td class="p-3 text-right font-mono text-slate-400">${m.part.toFixed(1)}%</td>
+            <td class="p-3 text-right font-mono font-semibold ${isLula1T ? "text-red-400" : "text-blue-400"}">
+              ${isLula1T ? "+" : ""}${m.m1p.toFixed(1)}%
+            </td>
+            <td class="p-3 text-right font-mono text-amber-400 font-semibold">${fmt(m.prot)}</td>
+            <td class="p-3 text-right font-mono text-blue-300">${fmt(m.caiado)}</td>
+            <td class="p-3 text-right font-mono text-slate-200 font-bold">${m.outp.toFixed(1)}%</td>
+          `;
+            tbody.appendChild(tr);
+          });
+        }
+
+        searchInput.addEventListener("input", filterAndDraw);
+        selectUF.addEventListener("change", filterAndDraw);
+        filterAndDraw();
+      }
+
+      // Attach listener
+      [
+        sCury,
+        sRenan,
+        sCaiado,
+        sZema,
+        sFlavDef,
+        sLulaRet,
+        sCompNE,
+        sCompSE,
+        sCompS,
+      ].forEach((s) => {
+        s.addEventListener("input", recalculate);
+      });
+
+      // =========================================================
+      // Agente de IA: carrega a análise de notícias e permite aplicar
+      // =========================================================
+      const AI_API = "/api/ai-analysis";
+      const AI_REFRESH = "/api/ai-analysis/refresh";
+      let lastAiParams = null;
+
+      const AI_PARAM_META = [
+        {
+          key: "cury_to_lula_pct",
+          label: "Cury → Lula",
+          central: 44,
+          unit: "%",
+          step: 1,
+        },
+        {
+          key: "renan_to_lula_pct",
+          label: "Renan → Lula",
+          central: 38,
+          unit: "%",
+          step: 1,
+        },
+        {
+          key: "caiado_to_lula_pct",
+          label: "Caiado → Lula",
+          central: 11,
+          unit: "%",
+          step: 1,
+        },
+        {
+          key: "zema_to_lula_pct",
+          label: "Zema → Lula",
+          central: 8,
+          unit: "%",
+          step: 1,
+        },
+        {
+          key: "flavio_defection_pct",
+          label: "Desvio base Flávio",
+          central: 5.0,
+          unit: "%",
+          step: 0.2,
+        },
+        {
+          key: "lula_retention_pct",
+          label: "Retenção base Lula",
+          central: 97.5,
+          unit: "%",
+          step: 0.5,
+        },
+        {
+          key: "turnout_delta_ne",
+          label: "Comparecimento NE",
+          central: 0,
+          unit: " p.p.",
+          step: 0.5,
+        },
+        {
+          key: "turnout_delta_se",
+          label: "Comparecimento SE",
+          central: 0,
+          unit: " p.p.",
+          step: 0.5,
+        },
+        {
+          key: "turnout_delta_s",
+          label: "Comparecimento Sul",
+          central: 0,
+          unit: " p.p.",
+          step: 0.5,
+        },
+      ];
+
+      function fmtTime(iso) {
+        try {
+          const d = new Date(iso);
+          return d.toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        } catch {
+          return iso;
+        }
+      }
+
+      async function loadAiAnalysis() {
+        const loading = document.getElementById("ai-loading");
+        const content = document.getElementById("ai-content");
+        const errBox = document.getElementById("ai-error");
+        const newsList = document.getElementById("ai-news-list");
+
+        if (loading) loading.classList.remove("hidden");
+        if (content) content.classList.add("hidden");
+        if (errBox) errBox.classList.add("hidden");
+
+        try {
+          const res = await fetch(AI_API);
+          // 404 = servidor sem API (ex.: aberto via file://); tenta fallback estático
+          if (res.status === 404) {
+            const r2 = await fetch("ai-analysis.json?t=" + Date.now());
+            if (!r2.ok)
+              throw Object.assign(new Error("API indisponível neste modo"), {
+                offline: true,
+              });
+            renderAiPayload(await r2.json());
+            return;
+          }
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          renderAiPayload(await res.json());
+        } catch (e) {
+          if (loading) loading.classList.add("hidden");
+          if (e.offline) {
+            newsList.innerHTML =
+              '<div class="text-sm text-slate-500 text-center py-6">Análise de IA disponível apenas quando o servidor está rodando (<code>npm start</code>).</div>';
+            return;
+          }
+          if (errBox) errBox.classList.remove("hidden");
+          const msg = document.getElementById("ai-error-msg");
+          if (msg) msg.textContent = e.message || String(e);
+        }
+      }
+
+      function renderAiPayload(payload) {
+        const loading = document.getElementById("ai-loading");
+        const content = document.getElementById("ai-content");
+        const newsList = document.getElementById("ai-news-list");
+
+        const a = payload.analysis || {};
+        const p = a.parametros_recomendados || {};
+        lastAiParams = p;
+
+        if (loading) loading.classList.add("hidden");
+        if (content) content.classList.remove("hidden");
+
+        document.getElementById("ai-timestamp").textContent =
+          "Atualizado em " +
+          fmtTime(payload.updated_at) +
+          (payload.model ? " · " + payload.model : "");
+        document.getElementById("ai-clima").textContent =
+          a.analise_clima_politico || "—";
+
+        const ul = document.getElementById("ai-destaques");
+        ul.innerHTML = "";
+        (a.destaques_noticias || []).forEach((d) => {
+          const li = document.createElement("li");
+          li.className = "flex gap-2";
+          li.innerHTML =
+            '<span class="text-violet-400 mt-0.5">▸</span><span>' +
+            escapeHtml(String(d)) +
+            "</span>";
+          ul.appendChild(li);
+        });
+
+        document.getElementById("ai-justificativa").textContent =
+          a.justificativa_parametros || "—";
+        document.getElementById("ai-projecao").textContent =
+          a.projecao_resumo || "—";
+
+        // tabela comparativa
+        const tb = document.getElementById("ai-params-tbody");
+        tb.innerHTML = "";
+        AI_PARAM_META.forEach((m) => {
+          const v = Number(p[m.key]);
+          if (isNaN(v)) return;
+          const delta = v - m.central;
+          const tr = document.createElement("tr");
+          const deltaTxt =
+            (delta > 0 ? "+" : "") +
+            delta.toFixed(1).replace(".", ",") +
+            m.unit;
+          const deltaCls =
+            Math.abs(delta) < 0.05
+              ? "text-slate-500"
+              : delta > 0
+                ? "text-red-400"
+                : "text-blue-400";
+          tr.innerHTML =
+            '<td class="py-1.5 text-slate-300">' +
+            m.label +
+            "</td>" +
+            '<td class="py-1.5 text-right font-mono text-slate-500">' +
+            m.central.toFixed(1).replace(".", ",") +
+            m.unit +
+            "</td>" +
+            '<td class="py-1.5 text-right font-mono font-semibold text-violet-300">' +
+            v.toFixed(1).replace(".", ",") +
+            m.unit +
+            "</td>" +
+            '<td class="py-1.5 text-right font-mono ' +
+            deltaCls +
+            '">' +
+            deltaTxt +
+            "</td>";
+          tb.appendChild(tr);
+        });
+
+        // notícias
+        newsList.innerHTML = "";
+        (payload.news_items || []).forEach((n) => {
+          const div = document.createElement("div");
+          div.className =
+            "bg-slate-800/40 rounded-lg p-2 border-l-2 border-violet-500/40";
+          const title = escapeHtml(n.title || "");
+          div.innerHTML =
+            '<a href="' +
+            escapeAttr(n.link || "#") +
+            '" target="_blank" rel="noopener" class="block text-xs text-slate-200 hover:text-violet-300 leading-snug py-1.5 -my-1.5">' +
+            title +
+            "</a>" +
+            '<div class="text-[10px] text-slate-500 mt-1">' +
+            escapeHtml(n.source || "") +
+            " · " +
+            fmtTime(n.pubDate) +
+            "</div>";
+          newsList.appendChild(div);
+        });
+        if (!(payload.news_items || []).length) {
+          newsList.innerHTML =
+            '<div class="text-sm text-slate-500 text-center py-6">Nenhuma notícia coletada.</div>';
+        }
+
+        document.getElementById("btn-apply-ai").classList.remove("hidden");
+      }
+
+      async function refreshAiAnalysis() {
+        const btn = document.getElementById("btn-refresh-ai");
+        const newsList = document.getElementById("ai-news-list");
+        const orig = btn.textContent;
+        btn.textContent = "↻ Processando…";
+        btn.disabled = true;
+        newsList.innerHTML =
+          '<div class="text-sm text-slate-500 text-center py-6">Coletando notícias e consultando a IA… isso pode levar ~20s.</div>';
+        try {
+          const res = await fetch(AI_REFRESH, { method: "POST" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          await loadAiAnalysis();
+        } catch (e) {
+          newsList.innerHTML =
+            '<div class="text-sm text-amber-400 text-center py-6">Falha ao atualizar: ' +
+            escapeHtml(e.message) +
+            "</div>";
+        } finally {
+          btn.textContent = orig;
+          btn.disabled = false;
+        }
+      }
+
+      function applyAiParams() {
+        if (!lastAiParams) return;
+        const p = lastAiParams;
+        const set = (id, v) => {
+          const el = document.getElementById(id);
+          if (el && !isNaN(v)) el.value = v;
+        };
+        set("slider-cury", p.cury_to_lula_pct);
+        set("slider-renan", p.renan_to_lula_pct);
+        set("slider-caiado", p.caiado_to_lula_pct);
+        set("slider-zema", p.zema_to_lula_pct);
+        set("slider-flav-def", p.flavio_defection_pct);
+        set("slider-lula-ret", p.lula_retention_pct);
+        set("slider-comp-ne", p.turnout_delta_ne);
+        set("slider-comp-se", p.turnout_delta_se);
+        set("slider-comp-s", p.turnout_delta_s);
+        recalculate();
+        document
+          .getElementById("simulador")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
+      function escapeAttr(s) {
+        return String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+        );
+      }
+
+      // Botão "voltar ao topo": só no mobile, some quando está no topo
+      const btnTopo = document.getElementById("btn-topo");
+      if (btnTopo) {
+        const onScroll = () => {
+          const visivel = window.scrollY > 700;
+          btnTopo.style.opacity = visivel ? "1" : "0";
+          btnTopo.style.pointerEvents = visivel ? "auto" : "none";
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      }
+
+      // Start
+      window.addEventListener("DOMContentLoaded", () => {
+        hydrateLabels();
+        initCharts();
+        renderMatrix();
+        renderClusters();
+        renderMunicipalities();
+        recalculate();
+        loadAiAnalysis();
+        // re-tenta a cada 30 min para manter o painel sincronizado com o agente horário
+        setInterval(loadAiAnalysis, 30 * 60 * 1000);
+      });
+    </script>
+  </body>
+</html>

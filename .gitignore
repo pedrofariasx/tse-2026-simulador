@@ -1,0 +1,29 @@
+# dependências
+node_modules/
+package-lock.json.bak
+
+# segredos / ambiente
+.env
+.env.local
+.env.*.local
+
+# logs e temporários
+data/logs/
+*.log
+.DS_Store
+
+# ---- Intermediários regeneráveis (reconstruídos por `npm run scrape && npm run build`) ----
+# o dump bruto de 92 MB: é a entrada do build, não um entregável
+data/processed/tse_6257_t1.jsonl
+# checkpoint do raspador (controla o "retomar"); sem sentido fora da máquina
+data/processed/tse_6257_t1.done
+# comparecimento por município/zona; regenerado junto com o dump
+data/processed/tse_6257_t1_ab.jsonl
+# payloads .jws brutos da API
+data/raw/**/*.jws
+
+# Mantidos de propósito (entregáveis / necessários ao app):
+#   data/processed/tse_2026_presidencia_1turno_completo.csv   microdados oficiais (20 MB)
+#   data/processed/geos.json                                 dataset normalizado geografia x candidato
+#   data/raw/ele2026/mun-config.json                         config de municípios/zonas (build.mjs)
+#   dashboard/data.js                                        base do dashboard

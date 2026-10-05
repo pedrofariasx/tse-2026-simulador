@@ -1,0 +1,272 @@
+{
+ "apuracao": {
+  "atualizado": "04/10/2026 23:24:47",
+  "pct_secoes": 99.99,
+  "vv": 119290243,
+  "branco": 2300706,
+  "nulo": 3668609,
+  "aptos": 158745502,
+  "comparecimento": 125264804,
+  "pct_comparecimento": 78.92
+ },
+ "LULA": "13",
+ "BOLS": "22",
+ "n_municipios": 5645,
+ "A_base": 0.01911234400791086,
+ "candidatos": [
+  {
+   "chave": "22",
+   "nome": "FLAVIO BOLSONARO",
+   "partido": "PL",
+   "num": "22",
+   "votos": 56103033,
+   "pct": 47.030697221398064,
+   "chapa": "FLAVIO BOLSONARO / ALFREDO GASPAR (PL)"
+  },
+  {
+   "chave": "13",
+   "nome": "LULA",
+   "partido": "PT",
+   "num": "13",
+   "votos": 53870724,
+   "pct": 45.15937150031625,
+   "chapa": "LULA / GERALDO ALCKMIN (PSB)"
+  },
+  {
+   "chave": "70",
+   "nome": "ESCRITOR AUGUSTO CURY",
+   "partido": "AVANTE",
+   "num": "70",
+   "votos": 3448466,
+   "pct": 2.890819830084511,
+   "chapa": "ESCRITOR AUGUSTO CURY / JÚLIO DELGADO (AVANTE)"
+  },
+  {
+   "chave": "14",
+   "nome": "RENAN SANTOS",
+   "partido": "MISSÃO",
+   "num": "14",
+   "votos": 2675840,
+   "pct": 2.243134000489881,
+   "chapa": "RENAN SANTOS / CORONEL MEDINA (MISSÃO)"
+  },
+  {
+   "chave": "55",
+   "nome": "RONALDO CAIADO",
+   "partido": "PSD",
+   "num": "55",
+   "votos": 2605054,
+   "pct": 2.1837946964363213,
+   "chapa": "RONALDO CAIADO / GILBERTO KASSAB (PSD)"
+  },
+  {
+   "chave": "30",
+   "nome": "ZEMA",
+   "partido": "NOVO",
+   "num": "30",
+   "votos": 326485,
+   "pct": 0.2736896093002342,
+   "chapa": "ZEMA / EDUARDO GIRÃO (NOVO)"
+  },
+  {
+   "chave": "80",
+   "nome": "SAMARA",
+   "partido": "UP",
+   "num": "80",
+   "votos": 122908,
+   "pct": 0.10303273504103769,
+   "chapa": "SAMARA / RAQUEL BRÍCIO (UP)"
+  },
+  {
+   "chave": "16",
+   "nome": "HERTZ DIAS",
+   "partido": "PSTU",
+   "num": "16",
+   "votos": 43102,
+   "pct": 0.03613204141096435,
+   "chapa": "HERTZ DIAS / VANESSA PORTUGAL (PSTU)"
+  },
+  {
+   "chave": "27",
+   "nome": "CLARIANA BARAO",
+   "partido": "DC",
+   "num": "27",
+   "votos": 40042,
+   "pct": 0.03356686933733549,
+   "chapa": "CLARIANA BARAO / FABIANA TORQUATO (DC)"
+  },
+  {
+   "chave": "21",
+   "nome": "EDMILSON COSTA",
+   "partido": "PCB",
+   "num": "21",
+   "votos": 22689,
+   "pct": 0.019019996463583363,
+   "chapa": "EDMILSON COSTA / CLEUSA SANTOS (PCB)"
+  },
+  {
+   "chave": "35",
+   "nome": "VETERINÁRIO WILSON GRASSI",
+   "partido": "DEMOCRATA",
+   "num": "35",
+   "votos": 16876,
+   "pct": 0.014147007815215868,
+   "chapa": "VETERINÁRIO WILSON GRASSI / SUÊD HAIDAR (DEMOCRATA)"
+  },
+  {
+   "chave": "29",
+   "nome": "RUI COSTA PIMENTA",
+   "partido": "PCO",
+   "num": "29",
+   "votos": 15024,
+   "pct": 0.01259449190660128,
+   "chapa": "RUI COSTA PIMENTA / ANTÔNIO CARLOS (PCO)"
+  }
+ ],
+ "geografia": [
+  {
+   "chave": "22",
+   "nome": "FLAVIO BOLSONARO",
+   "partido": "PL",
+   "num": "22",
+   "votos": 56103033,
+   "pct": 47.030697221398064,
+   "A": 0.11020353122433771,
+   "sd": 0.2667967210507766,
+   "dev": 0.09109118721642685,
+   "leitura": "EIXO DO LIDER"
+  },
+  {
+   "chave": "13",
+   "nome": "LULA",
+   "partido": "PT",
+   "num": "13",
+   "votos": 53870724,
+   "pct": 45.15937150031625,
+   "A": -0.08436814226289452,
+   "sd": 0.30464841299223794,
+   "dev": -0.10348048627080537,
+   "leitura": "EIXO DO 2º"
+  },
+  {
+   "chave": "70",
+   "nome": "ESCRITOR AUGUSTO CURY",
+   "partido": "AVANTE",
+   "num": "70",
+   "votos": 3448466,
+   "pct": 2.890819830084511,
+   "A": 0.04197002444960405,
+   "sd": 0.2707405455345941,
+   "dev": 0.02285768044169319,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "14",
+   "nome": "RENAN SANTOS",
+   "partido": "MISSÃO",
+   "num": "14",
+   "votos": 2675840,
+   "pct": 2.243134000489881,
+   "A": 0.06755451893106616,
+   "sd": 0.26125844147387267,
+   "dev": 0.04844217492315531,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "55",
+   "nome": "RONALDO CAIADO",
+   "partido": "PSD",
+   "num": "55",
+   "votos": 2605054,
+   "pct": 2.1837946964363213,
+   "A": 0.09983308391847054,
+   "sd": 0.2445792121747834,
+   "dev": 0.08072073991055968,
+   "leitura": "território>>> bolsonarista"
+  },
+  {
+   "chave": "30",
+   "nome": "ZEMA",
+   "partido": "NOVO",
+   "num": "30",
+   "votos": 326485,
+   "pct": 0.2736896093002342,
+   "A": 0.10566255139663819,
+   "sd": 0.21652717559683604,
+   "dev": 0.08655020738872733,
+   "leitura": "território>>> bolsonarista"
+  },
+  {
+   "chave": "80",
+   "nome": "SAMARA",
+   "partido": "UP",
+   "num": "80",
+   "votos": 122908,
+   "pct": 0.10303273504103769,
+   "A": 0.07183446650867094,
+   "sd": 0.22673299766440808,
+   "dev": 0.05272212250076008,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "16",
+   "nome": "HERTZ DIAS",
+   "partido": "PSTU",
+   "num": "16",
+   "votos": 43102,
+   "pct": 0.03613204141096435,
+   "A": 0.04998388811779587,
+   "sd": 0.23702297048013388,
+   "dev": 0.030871544109885008,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "27",
+   "nome": "CLARIANA BARAO",
+   "partido": "DC",
+   "num": "27",
+   "votos": 40042,
+   "pct": 0.03356686933733549,
+   "A": 0.0789492538062097,
+   "sd": 0.24965685999957868,
+   "dev": 0.05983690979829884,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "21",
+   "nome": "EDMILSON COSTA",
+   "partido": "PCB",
+   "num": "21",
+   "votos": 22689,
+   "pct": 0.019019996463583363,
+   "A": 0.04558359648038503,
+   "sd": 0.2734630484535625,
+   "dev": 0.026471252472474168,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "35",
+   "nome": "VETERINÁRIO WILSON GRASSI",
+   "partido": "DEMOCRATA",
+   "num": "35",
+   "votos": 16876,
+   "pct": 0.014147007815215868,
+   "A": 0.06385381207699899,
+   "sd": 0.24398540535180802,
+   "dev": 0.04474146806908813,
+   "leitura": "leve desvio"
+  },
+  {
+   "chave": "29",
+   "nome": "RUI COSTA PIMENTA",
+   "partido": "PCO",
+   "num": "29",
+   "votos": 15024,
+   "pct": 0.01259449190660128,
+   "A": 0.06331309551024177,
+   "sd": 0.23806419451862967,
+   "dev": 0.04420075150233091,
+   "leitura": "leve desvio"
+  }
+ ]
+}

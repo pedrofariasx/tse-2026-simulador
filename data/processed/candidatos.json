@@ -1,0 +1,122 @@
+[
+ {
+  "sqcand": "280002551544",
+  "chave": "22",
+  "nome": "FLAVIO BOLSONARO",
+  "chapa": "FLAVIO BOLSONARO / ALFREDO GASPAR (PL)",
+  "partido": "PL",
+  "num": "22",
+  "fed": "PL",
+  "votos_br": 56103033
+ },
+ {
+  "sqcand": "280002542548",
+  "chave": "13",
+  "nome": "LULA",
+  "chapa": "LULA / GERALDO ALCKMIN (PSB)",
+  "partido": "PT",
+  "num": "13",
+  "fed": "PSB / PDT / PCDOB / PT / PV / PSOL / REDE",
+  "votos_br": 53870724
+ },
+ {
+  "sqcand": "280002551547",
+  "chave": "70",
+  "nome": "ESCRITOR AUGUSTO CURY",
+  "chapa": "ESCRITOR AUGUSTO CURY / JÚLIO DELGADO (AVANTE)",
+  "partido": "AVANTE",
+  "num": "70",
+  "fed": "AGIR / AVANTE",
+  "votos_br": 3448466
+ },
+ {
+  "sqcand": "280002540694",
+  "chave": "14",
+  "nome": "RENAN SANTOS",
+  "chapa": "RENAN SANTOS / CORONEL MEDINA (MISSÃO)",
+  "partido": "MISSÃO",
+  "num": "14",
+  "fed": "MISSÃO",
+  "votos_br": 2675840
+ },
+ {
+  "sqcand": "280002551932",
+  "chave": "55",
+  "nome": "RONALDO CAIADO",
+  "chapa": "RONALDO CAIADO / GILBERTO KASSAB (PSD)",
+  "partido": "PSD",
+  "num": "55",
+  "fed": "PSD",
+  "votos_br": 2605054
+ },
+ {
+  "sqcand": "280002539826",
+  "chave": "30",
+  "nome": "ZEMA",
+  "chapa": "ZEMA / EDUARDO GIRÃO (NOVO)",
+  "partido": "NOVO",
+  "num": "30",
+  "fed": "NOVO",
+  "votos_br": 326485
+ },
+ {
+  "sqcand": "280002538811",
+  "chave": "80",
+  "nome": "SAMARA",
+  "chapa": "SAMARA / RAQUEL BRÍCIO (UP)",
+  "partido": "UP",
+  "num": "80",
+  "fed": "UP",
+  "votos_br": 122908
+ },
+ {
+  "sqcand": "280002541457",
+  "chave": "16",
+  "nome": "HERTZ DIAS",
+  "chapa": "HERTZ DIAS / VANESSA PORTUGAL (PSTU)",
+  "partido": "PSTU",
+  "num": "16",
+  "fed": "PSTU",
+  "votos_br": 43102
+ },
+ {
+  "sqcand": "280002552484",
+  "chave": "27",
+  "nome": "CLARIANA BARAO",
+  "chapa": "CLARIANA BARAO / FABIANA TORQUATO (DC)",
+  "partido": "DC",
+  "num": "27",
+  "fed": "DC",
+  "votos_br": 40042
+ },
+ {
+  "sqcand": "280002551975",
+  "chave": "21",
+  "nome": "EDMILSON COSTA",
+  "chapa": "EDMILSON COSTA / CLEUSA SANTOS (PCB)",
+  "partido": "PCB",
+  "num": "21",
+  "fed": "PCB",
+  "votos_br": 22689
+ },
+ {
+  "sqcand": "280002548139",
+  "chave": "35",
+  "nome": "VETERINÁRIO WILSON GRASSI",
+  "chapa": "VETERINÁRIO WILSON GRASSI / SUÊD HAIDAR (DEMOCRATA)",
+  "partido": "DEMOCRATA",
+  "num": "35",
+  "fed": "DEMOCRATA",
+  "votos_br": 16876
+ },
+ {
+  "sqcand": "280002552487",
+  "chave": "29",
+  "nome": "RUI COSTA PIMENTA",
+  "chapa": "RUI COSTA PIMENTA / ANTÔNIO CARLOS (PCO)",
+  "partido": "PCO",
+  "num": "29",
+  "fed": "PCO",
+  "votos_br": 15024
+ }
+]

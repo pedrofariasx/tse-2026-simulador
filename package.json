@@ -1,0 +1,43 @@
+{
+  "name": "tse-2026-simulador",
+  "version": "2.0.0",
+  "description": "Simulador preditivo do 2º turno das Eleições Presidenciais 2026 — dados do TSE, Monte Carlo e agente de IA",
+  "type": "module",
+  "main": "src/server.mjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "node --watch src/server.mjs",
+    "scrape": "node src/scrape.mjs all --conc=16",
+    "build": "node src/build.mjs",
+    "blocos": "node src/blocos.mjs",
+    "model": "node src/model.mjs --sims=30000",
+    "breakeven": "node src/breakeven.mjs",
+    "deep": "python3 src/deep_analysis.py",
+    "battlegrounds": "node src/battlegrounds.mjs",
+    "export-dashboard": "python3 src/export_dashboard_data.py",
+    "report": "python3 src/generate_full_report.py",
+    "audit:mobile": "node src/audit_mobile.mjs",
+    "verify:desktop": "node src/verify_dashboard.mjs",
+    "ai:once": "node -e \"import('./src/ai_agent.mjs').then(m=>m.runAiAnalysis()).then(r=>console.log('OK',r.updated_at))\"",
+    "pipeline": "npm run scrape && npm run build && npm run blocos && npm run model && npm run breakeven && npm run deep && npm run battlegrounds && npm run export-dashboard && npm run report"
+  },
+  "keywords": [
+    "eleicoes",
+    "tse",
+    "brasil",
+    "monte-carlo",
+    "eleitoral"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

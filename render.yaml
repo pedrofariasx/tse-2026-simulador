@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: tse-2026-simulador
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: UPDATE_INTERVAL_HOURS
+        value: "1"
+      - key: KILO_GATEWAY_URL
+        value: https://api.kilo.ai/api/gateway/v1/chat/completions
+      - key: KILO_MODEL
+        value: stepfun/step-3.7-flash:free
