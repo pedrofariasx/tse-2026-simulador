@@ -230,6 +230,11 @@
               >Simulador</a
             >
             <a
+              href="#apuracao"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-slate-800 active:bg-slate-700 text-slate-200 transition"
+              >Apuração</a
+            >
+            <a
               href="#ia"
               class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-violet-500/20 active:bg-violet-500/30 text-violet-300 border border-violet-500/30 transition"
               >🤖 Notícias</a
@@ -424,6 +429,103 @@
               Flávio 75,3% · Lula 24,7%
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVOLUÇÃO DA APURAÇÃO -->
+    <section
+      id="apuracao"
+      class="bg-slate-900/40 border-b border-slate-800 py-6 sm:py-8 px-3 sm:px-4"
+    >
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-xl sm:text-2xl font-black text-white mb-1">
+          📈 Evolução da Apuração
+        </h2>
+        <p class="text-sm text-slate-400 mb-5">
+          Progresso da totalização das seções entre
+          <strong class="text-slate-200" id="evo-inicio">—</strong> e
+          <strong class="text-slate-200" id="evo-fim">—</strong> (horário de
+          Brasília), 1º turno · 4 de outubro de 2026.
+        </p>
+        <div
+          class="bg-slate-900/70 rounded-2xl border border-slate-800 p-4 sm:p-6"
+        >
+          <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-4">
+            <div class="text-center">
+              <div
+                class="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider"
+              >
+                Início
+              </div>
+              <div
+                id="evo-stat-inicio"
+                class="text-sm sm:text-lg font-bold text-white font-mono"
+              >
+                —
+              </div>
+            </div>
+            <div class="text-center">
+              <div
+                class="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider"
+              >
+                50% das seções
+              </div>
+              <div
+                id="evo-stat-metade"
+                class="text-sm sm:text-lg font-bold text-amber-400 font-mono"
+              >
+                —
+              </div>
+            </div>
+            <div class="text-center">
+              <div
+                class="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider"
+              >
+                100% totalizado
+              </div>
+              <div
+                id="evo-stat-fim"
+                class="text-sm sm:text-lg font-bold text-emerald-400 font-mono"
+              >
+                —
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex items-center gap-1 mb-3 rounded-lg bg-slate-800/60 p-1 w-fit"
+            role="tablist"
+            aria-label="Modo do gráfico"
+          >
+            <button
+              id="evo-mode-progresso"
+              role="tab"
+              aria-selected="true"
+              class="evo-mode text-xs font-semibold px-3 py-1.5 rounded-md bg-blue-600 text-white transition"
+            >
+              Progresso
+            </button>
+            <button
+              id="evo-mode-votos"
+              role="tab"
+              aria-selected="false"
+              class="evo-mode text-xs font-semibold px-3 py-1.5 rounded-md text-slate-300 hover:text-white transition"
+            >
+              % dos Votos
+            </button>
+          </div>
+          <div class="h-64 sm:h-80">
+            <canvas id="chart-evolution"></canvas>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+            Cada município entra na curva no horário da sua última
+            atualização durante a apuração. A API do TSE não
+            disponibiliza snapshots históricos — a evolução é aproximada
+            pelo acumulado conforme os municípios foram totalizados.
+            No início, os percentuais refletem poucos municípios
+            (pequenos, do Norte e Centro-Oeste), por isso oscilam
+            mais que o resultado final.
+          </p>
         </div>
       </div>
     </section>
@@ -1627,6 +1729,196 @@
       let chartComparison = null;
       let chartSourcesFlavio = null;
       let chartSourcesLula = null;
+      let chartEvolution = null;
+      let evoData = null;
+      let evoMode = "progresso";
+
+      const evoModeBtns = {
+        progresso: document.getElementById("evo-mode-progresso"),
+        votos: document.getElementById("evo-mode-votos"),
+      };
+
+      function evoDatasets() {
+        if (!evoData) return [];
+        if (evoMode === "votos") {
+          return [
+            {
+              label: "Flávio Bolsonaro (PL)",
+              data: evoData.series.map((s) => s.pct_flavio),
+              borderColor: "#3b82f6",
+              backgroundColor: "rgba(59,130,246,0.12)",
+              fill: true,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHitRadius: 8,
+              borderWidth: 2,
+            },
+            {
+              label: "Lula (PT)",
+              data: evoData.series.map((s) => s.pct_lula),
+              borderColor: "#ef4444",
+              backgroundColor: "rgba(239,68,68,0.12)",
+              fill: true,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHitRadius: 8,
+              borderWidth: 2,
+            },
+          ];
+        }
+        return [
+          {
+            label: "Seções totalizadas",
+            data: evoData.series.map((s) => s.pct_secoes),
+            borderColor: "#3b82f6",
+            backgroundColor: "rgba(59,130,246,0.15)",
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+            pointHitRadius: 8,
+            borderWidth: 2,
+          },
+          {
+            label: "Eleitores aptos",
+            data: evoData.series.map((s) => s.pct_eleitores),
+            borderColor: "#a78bfa",
+            borderDash: [5, 4],
+            tension: 0.3,
+            pointRadius: 0,
+            pointHitRadius: 8,
+            borderWidth: 1.5,
+          },
+        ];
+      }
+
+      function evoOptions() {
+        if (evoMode === "votos") {
+          return {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
+              tooltip: {
+                callbacks: {
+                  label: (c) =>
+                    `${c.dataset.label}: ${c.raw.toFixed(2).replace(".", ",")}%`,
+                  afterLabel: (c) => {
+                    const s = evoData.series[c.dataIndex];
+                    return [
+                      `Flávio: ${s.flavio.toLocaleString("pt-BR")} votos`,
+                      `Lula: ${s.lula.toLocaleString("pt-BR")} votos`,
+                      `Votos válidos: ${s.validos.toLocaleString("pt-BR")}`,
+                      `Municípios: ${s.municipios.toLocaleString("pt-BR")}`,
+                    ];
+                  },
+                },
+              },
+            },
+            scales: {
+              x: {
+                ticks: { color: "#94a3b8", maxTicksLimit: 12 },
+                grid: { display: false },
+              },
+              y: {
+                ticks: { color: "#94a3b8", callback: (v) => v + "%" },
+                grid: { color: "#1e293b" },
+                title: {
+                  display: true,
+                  text: "% dos votos válidos",
+                  color: "#64748b",
+                },
+              },
+            },
+          };
+        }
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: (c) =>
+                  `${c.dataset.label}: ${c.raw.toFixed(1).replace(".", ",")}%`,
+                afterLabel: (c) => {
+                  const s = evoData.series[c.dataIndex];
+                  return [
+                    `Seções: ${s.secoes.toLocaleString("pt-BR")}`,
+                    `Municípios: ${s.municipios.toLocaleString("pt-BR")}`,
+                  ];
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              ticks: { color: "#94a3b8", maxTicksLimit: 12 },
+              grid: { display: false },
+            },
+            y: {
+              min: 0,
+              max: 100,
+              ticks: { color: "#94a3b8", callback: (v) => v + "%" },
+              grid: { color: "#1e293b" },
+            },
+          },
+        };
+      }
+
+      function renderEvolutionChart() {
+        if (!evoData || !evoData.series || !evoData.series.length) return;
+        const ctx = document.getElementById("chart-evolution").getContext("2d");
+        if (chartEvolution) chartEvolution.destroy();
+        chartEvolution = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: evoData.series.map((s) => s.t),
+            datasets: evoDatasets(),
+          },
+          options: evoOptions(),
+        });
+      }
+
+      function setEvoMode(mode) {
+        evoMode = mode;
+        for (const [k, btn] of Object.entries(evoModeBtns)) {
+          if (!btn) continue;
+          const active = k === mode;
+          btn.setAttribute("aria-selected", String(active));
+          btn.className =
+            "evo-mode text-xs font-semibold px-3 py-1.5 rounded-md transition " +
+            (active
+              ? "bg-blue-600 text-white"
+              : "text-slate-300 hover:text-white");
+        }
+        renderEvolutionChart();
+      }
+
+      async function loadEvolution() {
+        try {
+          const res = await fetch("/api/evolution");
+          if (!res.ok) return;
+          const ev = await res.json();
+          if (!ev.series || !ev.series.length) return;
+          evoData = ev;
+
+          document.getElementById("evo-inicio").textContent = ev.inicio;
+          document.getElementById("evo-fim").textContent = ev.fim;
+          document.getElementById("evo-stat-inicio").textContent = ev.inicio;
+          document.getElementById("evo-stat-metade").textContent =
+            ev.momentos.metade || "—";
+          document.getElementById("evo-stat-fim").textContent = ev.fim;
+
+          renderEvolutionChart();
+          for (const btn of Object.values(evoModeBtns)) {
+            if (btn) btn.addEventListener("click", () => setEvoMode(btn.id.endsWith("votos") ? "votos" : "progresso"));
+          }
+        } catch (e) {
+          console.warn("evolution chart failed", e);
+        }
+      }
 
       function initCharts() {
         // Comparison chart
@@ -2453,6 +2745,7 @@
       window.addEventListener("DOMContentLoaded", () => {
         hydrateLabels();
         initCharts();
+        loadEvolution();
         renderMatrix();
         renderClusters();
         renderMunicipalities();

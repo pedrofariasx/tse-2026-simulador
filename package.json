@@ -12,6 +12,7 @@
     "dev": "node --watch src/server.mjs",
     "scrape": "node src/scrape.mjs all --conc=16",
     "build": "node src/build.mjs",
+    "evolution": "node src/evolution.mjs",
     "blocos": "node src/blocos.mjs",
     "model": "node src/model.mjs --sims=30000",
     "breakeven": "node src/breakeven.mjs",

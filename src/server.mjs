@@ -74,6 +74,19 @@ app.get('/api/data', (req, res) => {
   }
 });
 
+// Apuracao evolution time series (from per-municipality ab timestamps)
+app.get('/api/evolution', (req, res) => {
+  try {
+    const evoPath = path.join(DATA_DIR, 'evolution.json');
+    if (fs.existsSync(evoPath)) {
+      return res.json(JSON.parse(fs.readFileSync(evoPath, 'utf8')));
+    }
+    res.status(404).json({ error: 'evolution.json not found — run: npm run evolution' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read evolution data', details: err.message });
+  }
+});
+
 // Simulation endpoint (allows server-side exact calculation)
 app.post('/api/simulate', (req, res) => {
   try {
