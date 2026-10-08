@@ -13,6 +13,8 @@
     "scrape": "node src/scrape.mjs all --conc=16",
     "build": "node src/build.mjs",
     "evolution": "node src/evolution.mjs",
+    "mapa": "node src/mapa.mjs",
+    "segundo-turno": "node src/segundo_turno.mjs",
     "blocos": "node src/blocos.mjs",
     "model": "node src/model.mjs --sims=30000",
     "breakeven": "node src/breakeven.mjs",

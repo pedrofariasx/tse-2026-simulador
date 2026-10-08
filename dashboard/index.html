@@ -235,6 +235,11 @@
               >Apuração</a
             >
             <a
+              href="#mapa"
+              class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-slate-800 active:bg-slate-700 text-slate-200 transition"
+              >Mapa</a
+            >
+            <a
               href="#ia"
               class="snap-start whitespace-nowrap text-xs font-semibold px-3 py-2 min-h-[40px] inline-flex items-center rounded-md bg-violet-500/20 active:bg-violet-500/30 text-violet-300 border border-violet-500/30 transition"
               >🤖 Notícias</a
@@ -258,6 +263,30 @@
               <span class="hidden sm:inline">Relatório Completo</span>
               <span class="sm:hidden">Relatório</span> ↗
             </a>
+            <div
+              class="flex items-center gap-1 min-w-max ml-1 sm:ml-2 pl-1 sm:pl-2 border-l border-slate-700/60"
+              role="tablist"
+              aria-label="Turno da eleição"
+            >
+              <span
+                class="text-[10px] text-slate-500 uppercase tracking-wider hidden md:inline"
+                >Turno</span
+              >
+              <button
+                id="turno-1"
+                role="tab"
+                aria-selected="true"
+                class="turno-btn text-xs font-bold px-2.5 py-2 min-h-[40px] rounded-md bg-blue-600 active:bg-blue-500 text-white transition"
+                >1º</button
+              >
+              <button
+                id="turno-2"
+                role="tab"
+                aria-selected="false"
+                class="turno-btn text-xs font-bold px-2.5 py-2 min-h-[40px] rounded-md bg-slate-800 active:bg-slate-700 text-slate-300 hover:text-white transition"
+                >2º</button
+              >
+            </div>
           </div>
         </nav>
       </div>
@@ -449,6 +478,16 @@
           Brasília), 1º turno · 4 de outubro de 2026.
         </p>
         <div
+          id="evo-aviso"
+          class="hidden mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200"
+        >
+          <span id="evo-aviso-txt">
+            Dados do 2º turno ainda não disponíveis. O servidor está monitorando
+            o TSE automaticamente e o gráfico será preenchido assim que a
+            apuração do 2º turno começar, em <strong>25 de outubro</strong>.
+          </span>
+        </div>
+        <div
           class="bg-slate-900/70 rounded-2xl border border-slate-800 p-4 sm:p-6"
         >
           <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-4">
@@ -526,6 +565,161 @@
             (pequenos, do Norte e Centro-Oeste), por isso oscilam
             mais que o resultado final.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAPA DA APURAÇÃO -->
+    <section
+      id="mapa"
+      class="bg-slate-900/40 border-b border-slate-800 py-6 sm:py-8 px-3 sm:px-4"
+    >
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-xl sm:text-2xl font-black text-white mb-1">
+          🗺️ Mapa da Apuração
+        </h2>
+        <p class="text-sm text-slate-400 mb-5">
+          Cor predominante do voto em cada município/estado conforme a
+          apuração avança. Arraste a linha do tempo ou aperte play.
+        </p>
+        <div
+          id="mapa-aviso"
+          class="hidden mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200"
+        >
+          <span id="mapa-aviso-txt">
+            Dados do 2º turno ainda não disponíveis. O servidor está monitorando
+            o TSE automaticamente e o mapa será preenchido assim que a
+            apuração do 2º turno começar, em <strong>25 de outubro</strong>.
+          </span>
+        </div>
+        <div
+          class="bg-slate-900/70 rounded-2xl border border-slate-800 p-4 sm:p-6"
+        >
+          <!-- Controles: modo + play -->
+          <div
+            class="flex flex-wrap items-center justify-between gap-3 mb-4"
+          >
+            <div
+              class="flex items-center gap-1 rounded-lg bg-slate-800/60 p-1"
+              role="tablist"
+              aria-label="Nível do mapa"
+            >
+              <button
+                id="mapa-mode-municipios"
+                role="tab"
+                aria-selected="true"
+                class="mapa-mode text-xs font-semibold px-3 py-1.5 rounded-md bg-blue-600 text-white transition"
+              >
+                Municípios
+              </button>
+              <button
+                id="mapa-mode-estados"
+                role="tab"
+                aria-selected="false"
+                class="mapa-mode text-xs font-semibold px-3 py-1.5 rounded-md text-slate-300 hover:text-white transition"
+              >
+                Estados
+              </button>
+            </div>
+            <button
+              id="mapa-play"
+              class="text-xs font-semibold px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition inline-flex items-center gap-2"
+            >
+              <span id="mapa-play-icon">▶</span>
+              <span id="mapa-play-label">Reproduzir</span>
+            </button>
+          </div>
+
+          <!-- Mapa -->
+          <div
+            class="relative rounded-xl bg-slate-950/60 border border-slate-800 overflow-hidden"
+          >
+            <svg
+              id="mapa-svg"
+              class="w-full h-auto block"
+              viewBox="0 0 800 500"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              aria-label="Mapa do Brasil com resultado por município"
+            ></svg>
+            <div
+              id="mapa-loading"
+              class="absolute inset-0 flex items-center justify-center text-slate-500 text-sm"
+            >
+              Carregando mapa…
+            </div>
+          </div>
+
+          <!-- Linha do tempo -->
+          <div class="mt-4">
+            <div class="flex items-center gap-3">
+              <span
+                id="mapa-t-start"
+                class="text-[10px] sm:text-xs text-slate-500 font-mono whitespace-nowrap"
+              >
+                —
+              </span>
+              <input
+                id="mapa-timeline"
+                type="range"
+                min="0"
+                max="1000"
+                value="0"
+                step="1"
+                class="mapa-slider flex-1"
+                aria-label="Linha do tempo da apuração"
+              />
+              <span
+                id="mapa-t-end"
+                class="text-[10px] sm:text-xs text-slate-500 font-mono whitespace-nowrap"
+              >
+                —
+              </span>
+            </div>
+            <div class="text-center mt-1">
+              <span
+                id="mapa-t-current"
+                class="text-sm sm:text-base font-bold text-white font-mono"
+              >
+                —
+              </span>
+            </div>
+          </div>
+
+          <!-- Legenda + stats -->
+          <div
+            class="flex flex-wrap items-center justify-between gap-3 mt-4"
+          >
+            <div class="flex items-center gap-4 text-xs">
+              <span class="flex items-center gap-1.5">
+                <span
+                  class="w-3 h-3 rounded-sm"
+                  style="background:#3b82f6"
+                ></span>
+                Flávio (PL)
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span
+                  class="w-3 h-3 rounded-sm"
+                  style="background:#ef4444"
+                ></span>
+                Lula (PT)
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span
+                  class="w-3 h-3 rounded-sm"
+                  style="background:#334155"
+                ></span>
+                Não totalizado
+              </span>
+            </div>
+            <div
+              id="mapa-stats"
+              class="text-xs text-slate-400 font-mono"
+            >
+              —
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1738,6 +1932,47 @@
         votos: document.getElementById("evo-mode-votos"),
       };
 
+      // Turno atual (1º ou 2º) — controla gráfico e mapa.
+      // O 2º turno só existe a partir de 25/out; enquanto o TSE não
+      // publicar, a API retorna 404 e o painel avisa que está indisponível.
+      let turnoAtual = "1";
+
+      function setTurno(turno) {
+        if (turnoAtual === turno) return;
+        turnoAtual = turno;
+        const b1 = document.getElementById("turno-1");
+        const b2 = document.getElementById("turno-2");
+        for (const [btn, ativo] of [[b1, turno === "1"], [b2, turno === "2"]]) {
+          if (!btn) continue;
+          btn.setAttribute("aria-selected", String(ativo));
+          btn.classList.toggle("bg-blue-600", ativo);
+          btn.classList.toggle("text-white", ativo);
+          btn.classList.toggle("bg-slate-800", !ativo);
+          btn.classList.toggle("text-slate-300", !ativo);
+        }
+        if (turno === "2") startTurnoPolling();
+        else stopTurnoPolling();
+        loadEvolution();
+        if (MAPA.carregado) loadMapa();
+      }
+
+      let turnoPollingTimer = null;
+
+      function startTurnoPolling() {
+        stopTurnoPolling();
+        turnoPollingTimer = setInterval(() => {
+          loadEvolution();
+          if (MAPA.carregado) loadMapa();
+        }, 60000);
+      }
+
+      function stopTurnoPolling() {
+        if (turnoPollingTimer) {
+          clearInterval(turnoPollingTimer);
+          turnoPollingTimer = null;
+        }
+      }
+
       function evoDatasets() {
         if (!evoData) return [];
         if (evoMode === "votos") {
@@ -1897,12 +2132,24 @@
       }
 
       async function loadEvolution() {
+        const aviso = document.getElementById("evo-aviso");
         try {
-          const res = await fetch("/api/evolution");
-          if (!res.ok) return;
+          const res = await fetch("/api/evolution?turno=" + turnoAtual);
+          if (!res.ok) {
+            // 2º turno ainda não publicado pelo TSE
+            evoData = null;
+            if (aviso) aviso.classList.remove("hidden");
+            if (chartEvolution) {
+              chartEvolution.data.labels = [];
+              chartEvolution.data.datasets = [];
+              chartEvolution.update();
+            }
+            return;
+          }
           const ev = await res.json();
           if (!ev.series || !ev.series.length) return;
           evoData = ev;
+          if (aviso) aviso.classList.add("hidden");
 
           document.getElementById("evo-inicio").textContent = ev.inicio;
           document.getElementById("evo-fim").textContent = ev.fim;
@@ -2741,6 +2988,334 @@
         onScroll();
       }
 
+      // ===== MAPA DA APURAÇÃO =====
+      const MAPA = {
+        geo: null,
+        dados: null,
+        porIbge: null,
+        porUf: null,
+        paths: null,
+        modo: "municipios",
+        tempo: 0,
+        tocando: false,
+        timer: null,
+        pending: false,
+        tooltip: null,
+        carregado: false,
+      };
+
+      const MAPA_CORES = {
+        flavio: "#3b82f6",
+        lula: "#ef4444",
+        empate: "#a855f7",
+        pendente: "#1e293b",
+      };
+
+      const UF_NOME = {
+        AC: "Acre", AL: "Alagoas", AM: "Amazonas", AP: "Amapá",
+        BA: "Bahia", CE: "Ceará", DF: "Distrito Federal",
+        ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão",
+        MG: "Minas Gerais", MS: "Mato Grosso do Sul", MT: "Mato Grosso",
+        PA: "Pará", PB: "Paraíba", PE: "Pernambuco", PI: "Piauí",
+        PR: "Paraná", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte",
+        RO: "Rondônia", RR: "Roraima", RS: "Rio Grande do Sul",
+        SC: "Santa Catarina", SE: "Sergipe", SP: "São Paulo",
+        TO: "Tocantins",
+      };
+
+      function fmtMapaTempo(ms) {
+        const opts = {
+          day: "2-digit", month: "2-digit",
+          hour: "2-digit", minute: "2-digit",
+        };
+        try {
+          return new Date(ms).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", ...opts });
+        } catch {
+          return new Date(ms).toLocaleString("pt-BR", opts);
+        }
+      }
+
+      async function loadMapa() {
+        const aviso = document.getElementById("mapa-aviso");
+        const loading = document.getElementById("mapa-loading");
+        try {
+          const [geoMun, geoEst, resMapa] = await Promise.all([
+            fetch("/br-municipios.geojson").then((r) => r.json()),
+            fetch("/br-estados.geojson").then((r) => r.json()),
+            fetch("/api/mapa?turno=" + turnoAtual),
+          ]);
+          if (!resMapa.ok) {
+            // 2º turno ainda não publicado pelo TSE
+            MAPA.dados = null;
+            if (aviso) aviso.classList.remove("hidden");
+            if (loading) {
+              loading.style.display = "none";
+            }
+            return;
+          }
+          const dados = await resMapa.json();
+          if (!geoMun.features || !dados.municipios) return;
+          MAPA.geo = { municipios: geoMun, estados: geoEst };
+          MAPA.dados = dados;
+          MAPA.carregado = true;
+          MAPA.porIbge = new Map(dados.municipios.map((m) => [m.ibge, m]));
+          MAPA.porUf = new Map();
+          for (const m of dados.municipios) {
+            if (!m.u || m.u === "ZZ") continue;
+            const arr = MAPA.porUf.get(m.u);
+            if (arr) arr.push(m);
+            else MAPA.porUf.set(m.u, [m]);
+          }
+          if (loading) loading.style.display = "none";
+          if (aviso) aviso.classList.add("hidden");
+          document.getElementById("mapa-t-start").textContent = fmtMapaTempo(dados.t0);
+          document.getElementById("mapa-t-end").textContent = fmtMapaTempo(dados.t1);
+          renderMapa();
+          setupMapaControles();
+        } catch (e) {
+          console.warn("mapa failed", e);
+          if (loading) loading.textContent = "Não foi possível carregar o mapa.";
+        }
+      }
+
+      function mapaBounds(geojson) {
+        let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
+        for (const ft of geojson.features) {
+          const g = ft.geometry;
+          if (!g) continue;
+          const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+          for (const p of polys) {
+            for (const ring of p) {
+              for (const pt of ring) {
+                if (pt[0] < minLon) minLon = pt[0];
+                if (pt[0] > maxLon) maxLon = pt[0];
+                if (pt[1] < minLat) minLat = pt[1];
+                if (pt[1] > maxLat) maxLat = pt[1];
+              }
+            }
+          }
+        }
+        return [minLon, minLat, maxLon, maxLat];
+      }
+
+      function mapaCaminho(ft, proj) {
+        const g = ft.geometry;
+        const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+        let d = "";
+        for (const p of polys) {
+          for (const ring of p) {
+            d += "M";
+            for (let i = 0; i < ring.length; i++) {
+              const xy = proj(ring[i][0], ring[i][1]);
+              d += (i === 0 ? "" : "L") + xy[0].toFixed(1) + "," + xy[1].toFixed(1);
+            }
+            d += "Z";
+          }
+        }
+        return d;
+      }
+
+      function renderMapa() {
+        const svg = document.getElementById("mapa-svg");
+        const W = 800, H = 500;
+        const geojson = MAPA.geo[MAPA.modo];
+        const b = mapaBounds(geojson);
+        const pad = 24;
+        const scaleX = (W - pad * 2) / (b[2] - b[0]);
+        const scaleY = (H - pad * 2) / (b[3] - b[1]);
+        const scale = Math.min(scaleX, scaleY);
+        const ox = pad + ((W - pad * 2) - scale * (b[2] - b[0])) / 2;
+        const oy = pad + ((H - pad * 2) - scale * (b[3] - b[1])) / 2;
+        const proj = (lon, lat) => [ox + scale * (lon - b[0]), oy + scale * (b[3] - lat)];
+
+        const ns = "http://www.w3.org/2000/svg";
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        MAPA.paths = new Map();
+        const frag = document.createDocumentFragment();
+        for (const ft of geojson.features) {
+          const chave = MAPA.modo === "municipios" ? ft.properties.codarea : ft.properties.sigla;
+          const d = mapaCaminho(ft, proj);
+          if (!d) continue;
+          const path = document.createElementNS(ns, "path");
+          path.setAttribute("d", d);
+          path.setAttribute("fill", MAPA_CORES.pendente);
+          path.setAttribute("stroke", "#0f172a");
+          path.setAttribute("stroke-width", MAPA.modo === "municipios" ? "0.4" : "1.2");
+          path.setAttribute("vector-effect", "non-scaling-stroke");
+          path.dataset.chave = chave;
+          path.addEventListener("mousemove", onMapaHover);
+          path.addEventListener("mouseleave", onMapaLeave);
+          frag.appendChild(path);
+          MAPA.paths.set(chave, path);
+        }
+        svg.appendChild(frag);
+        MAPA.tempo = MAPA.dados.t0;
+        atualizaMapa();
+      }
+
+      function corPredominante(f, l) {
+        if (f > l) return MAPA_CORES.flavio;
+        if (l > f) return MAPA_CORES.lula;
+        return MAPA_CORES.empate;
+      }
+
+      function atualizaMapa() {
+        if (!MAPA.paths) return;
+        const t = MAPA.tempo;
+        if (MAPA.modo === "municipios") {
+          for (const [ibge, path] of MAPA.paths) {
+            const m = MAPA.porIbge.get(ibge);
+            path.setAttribute("fill", m && m.t <= t ? corPredominante(m.f, m.l) : MAPA_CORES.pendente);
+          }
+        } else {
+          for (const [sigla, path] of MAPA.paths) {
+            const arr = MAPA.porUf.get(sigla);
+            let f = 0, l = 0;
+            if (arr) {
+              for (const m of arr) {
+                if (m.t <= t) { f += m.f; l += m.l; }
+              }
+            }
+            path.setAttribute("fill", f + l > 0 ? corPredominante(f, l) : MAPA_CORES.pendente);
+          }
+        }
+        atualizaMapaStats();
+      }
+
+      function atualizaMapaStats() {
+        const t = MAPA.tempo;
+        let totalizados = 0, f = 0, l = 0;
+        for (const m of MAPA.dados.municipios) {
+          if (m.t <= t) { totalizados++; f += m.f; l += m.l; }
+        }
+        const total = MAPA.dados.municipios.length;
+        const soma = f + l;
+        const pctF = soma > 0 ? (f / soma) * 100 : 0;
+        const pctL = soma > 0 ? (l / soma) * 100 : 0;
+        document.getElementById("mapa-t-current").textContent = fmtMapaTempo(t);
+        document.getElementById("mapa-stats").textContent =
+          totalizados.toLocaleString("pt-BR") + "/" + total.toLocaleString("pt-BR") +
+          " municípios · Flávio " + pctF.toFixed(1) + "% · Lula " + pctL.toFixed(1) + "%";
+      }
+
+      function agendaAtualizaMapa() {
+        if (MAPA.pending) return;
+        MAPA.pending = true;
+        requestAnimationFrame(() => {
+          MAPA.pending = false;
+          atualizaMapa();
+        });
+      }
+
+      function setupMapaControles() {
+        const slider = document.getElementById("mapa-timeline");
+        const t0 = MAPA.dados.t0, t1 = MAPA.dados.t1;
+        const aplicar = () => {
+          const frac = Number(slider.value) / 1000;
+          MAPA.tempo = t0 + frac * (t1 - t0);
+          agendaAtualizaMapa();
+        };
+        slider.addEventListener("input", aplicar);
+
+        const btnMun = document.getElementById("mapa-mode-municipios");
+        const btnEst = document.getElementById("mapa-mode-estados");
+        const setModo = (modo) => {
+          if (MAPA.modo === modo) return;
+          MAPA.modo = modo;
+          const configs = [
+            [btnMun, modo === "municipios"],
+            [btnEst, modo === "estados"],
+          ];
+          for (const [btn, ativo] of configs) {
+            btn.setAttribute("aria-selected", String(ativo));
+            btn.classList.toggle("bg-blue-600", ativo);
+            btn.classList.toggle("text-white", ativo);
+            btn.classList.toggle("text-slate-300", !ativo);
+          }
+          renderMapa();
+        };
+        btnMun.addEventListener("click", () => setModo("municipios"));
+        btnEst.addEventListener("click", () => setModo("estados"));
+
+        const btnPlay = document.getElementById("mapa-play");
+        const icon = document.getElementById("mapa-play-icon");
+        const label = document.getElementById("mapa-play-label");
+        btnPlay.addEventListener("click", () => {
+          if (MAPA.tocando) {
+            MAPA.tocando = false;
+            clearInterval(MAPA.timer);
+            icon.textContent = "▶";
+            label.textContent = "Reproduzir";
+            return;
+          }
+          MAPA.tocando = true;
+          icon.textContent = "⏸";
+          label.textContent = "Pausar";
+          if (Number(slider.value) >= 1000) slider.value = 0;
+          MAPA.timer = setInterval(() => {
+            let v = Number(slider.value) + 4;
+            if (v >= 1000) {
+              v = 1000;
+              MAPA.tocando = false;
+              clearInterval(MAPA.timer);
+              icon.textContent = "▶";
+              label.textContent = "Reproduzir";
+            }
+            slider.value = v;
+            aplicar();
+          }, 40);
+        });
+      }
+
+      function onMapaHover(e) {
+        const chave = e.currentTarget.dataset.chave;
+        let html = "";
+        if (MAPA.modo === "municipios") {
+          const m = MAPA.porIbge.get(chave);
+          if (m) {
+            html = "<b>" + m.n + "</b> — " + (UF_NOME[m.u] || m.u) + "<br>";
+            if (m.t <= MAPA.tempo) {
+              html += "Flávio: " + m.f.toLocaleString("pt-BR") + "<br>Lula: " + m.l.toLocaleString("pt-BR");
+            } else {
+              html += "Totaliza às " + fmtMapaTempo(m.t);
+            }
+          }
+        } else {
+          const arr = MAPA.porUf.get(chave);
+          let f = 0, l = 0, count = 0;
+          if (arr) {
+            for (const m of arr) {
+              if (m.t <= MAPA.tempo) { f += m.f; l += m.l; count++; }
+            }
+          }
+          html = "<b>" + (UF_NOME[chave] || chave) + "</b><br>";
+          if (count > 0) {
+            html += count.toLocaleString("pt-BR") + " municípios totalizados<br>" +
+              "Flávio: " + f.toLocaleString("pt-BR") + "<br>Lula: " + l.toLocaleString("pt-BR");
+          } else {
+            html += "Aguardando totalização";
+          }
+        }
+        let tip = MAPA.tooltip;
+        if (!tip) {
+          tip = document.createElement("div");
+          tip.style.cssText =
+            "position:fixed;z-index:50;pointer-events:none;background:#0f172a;" +
+            "border:1px solid #334155;color:#e2e8f0;font-size:11px;padding:6px 8px;" +
+            "border-radius:6px;display:none;max-width:240px;box-shadow:0 4px 12px rgba(0,0,0,.5);";
+          document.body.appendChild(tip);
+          MAPA.tooltip = tip;
+        }
+        tip.innerHTML = html;
+        tip.style.display = "block";
+        tip.style.left = e.clientX + 12 + "px";
+        tip.style.top = e.clientY + 12 + "px";
+      }
+
+      function onMapaLeave() {
+        if (MAPA.tooltip) MAPA.tooltip.style.display = "none";
+      }
+
       // Start
       window.addEventListener("DOMContentLoaded", () => {
         hydrateLabels();
@@ -2751,6 +3326,24 @@
         renderMunicipalities();
         recalculate();
         loadAiAnalysis();
+        // toggle de turno (1º / 2º)
+        const t1 = document.getElementById("turno-1");
+        const t2 = document.getElementById("turno-2");
+        if (t1) t1.addEventListener("click", () => setTurno("1"));
+        if (t2) t2.addEventListener("click", () => setTurno("2"));
+        // mapa: carrega quando a seção fica visível (economiza banda)
+        const mapaSection = document.getElementById("mapa");
+        if (mapaSection && "IntersectionObserver" in window) {
+          const obs = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+              loadMapa();
+              obs.disconnect();
+            }
+          }, { rootMargin: "300px" });
+          obs.observe(mapaSection);
+        } else {
+          loadMapa();
+        }
         // re-tenta a cada 30 min para manter o painel sincronizado com o agente horário
         setInterval(loadAiAnalysis, 30 * 60 * 1000);
       });

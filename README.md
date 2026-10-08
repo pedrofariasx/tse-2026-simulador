@@ -47,6 +47,10 @@ O servidor sobe com o dashboard e o agente de IA já ativo.
 | `/api/ai-analysis/refresh` | POST   | Força nova coleta + análise (~20 s)       |
 | `/api/data`                | GET    | Dataset completo do TSE em JSON           |
 | `/api/simulate`            | POST   | Calcula o 2º turno no servidor            |
+| `/api/evolution`           | GET    | Série temporal da apuração (5 min)        |
+| `/api/mapa`                | GET    | Dados por município p/ o mapa (ibge, t, votos) |
+| `/br-municipios.geojson`   | GET    | Malha municipal simplificada (1,8 MB)     |
+| `/br-estados.geojson`      | GET    | Malha estadual (487 KB)                   |
 
 Exemplo:
 
@@ -151,6 +155,14 @@ npm run export-dashboard
 npm run report
 ```
 
+Séries temporais da apuração (gráfico e mapa):
+
+```bash
+npm run evolution       # série do 1º turno -> evolution.json
+npm run mapa            # dados municipais do 1º turno -> mapa.json
+npm run segundo-turno   # 2º turno (a partir de 25/out)
+```
+
 Ou tudo em sequência: `npm run pipeline`.
 
 > `deep`, `export-dashboard` e `report` usam `python3`. Os demais são Node puro.
@@ -169,6 +181,28 @@ Seção **"Começando do zero"**, no topo, explica em linguagem simples:
 
 Depois, o painel de sliders simula cenários em tempo real e a seção 🤖 mostra o que as
 notícias estão dizendo e o que a IA sugere a partir delas.
+
+As seções **📈 Evolução da Apuração** e **🗺️ Mapa da Apuração** mostram o
+progresso ao longo do tempo: a primeira com curvas de seções/eleitores e
+percentual de votos; a segunda com o mapa do Brasil (municípios ou estados)
+colorido pelo voto predominante, com linha do tempo arrastável e botão play.
+Os dados vêm do arquivo "ab" do TSE, que registra o horário da última
+atualização de cada município (`npm run mapa` gera `data/processed/mapa.json`).
+
+**Toggle de turno (1º / 2º):** a barra de navegação tem um seletor de
+turno que troca o gráfico e o mapa entre o 1º e o 2º turno. O 2º turno
+só existe a partir de **25/out** — enquanto o TSE não publicar, o
+painel avisa que está indisponível. Para coletar e gerar os dados do
+2º turno (assim que o TSE publicar a eleição):
+
+```bash
+npm run segundo-turno            # descobre o ID, coleta e gera
+npm run segundo-turno -- --atualiza   # reforça a coleta (durante a apuração)
+npm run segundo-turno -- --completo   # inclui o nível zona (voto cruzado)
+```
+
+O pipeline descobre sozinho o novo ID de eleição do 2º turno e os
+candidatos (pelo nome, no nível "br"), sem hardcode.
 
 ---
 
@@ -225,12 +259,14 @@ node src/audit_mobile.mjs    # mede overflow, alvos de toque e âncoras; salva s
 
 | Arquivo                                                                              | Descrição                                      |
 | ------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| `dashboard/index.html`                                                               | Simulador + guia para leigos + seção de IA     |
+| `dashboard/index.html`                                                               | Simulador + guia + IA + evolução + mapa     |
 | `dashboard/data.js`                                                                  | Dataset do TSE para o dashboard                |
 | `dashboard/ai-analysis.json`                                                         | Último resultado do agente (fallback estático) |
+| `dashboard/br-municipios.geojson` · `br-estados.geojson`                           | Malhas geográficas simplificadas (mapa)        |
 | `src/server.mjs`                                                                     | Servidor Express + scheduler do agente         |
 | `src/ai_agent.mjs`                                                                   | Coleta de notícias + chamada ao Kilo Gateway   |
 | `src/scrape.mjs`                                                                     | Raspador com checkpoints e concorrência        |
+| `src/evolution.mjs` · `src/mapa.mjs`                                                 | Séries temporais da apuração (gráfico + mapa)  |
 | `src/build.mjs` · `blocos.mjs` · `model.mjs` · `breakeven.mjs` · `battlegrounds.mjs` | Pipeline de análise                            |
 | `src/deep_analysis.py` · `export_dashboard_data.py` · `generate_full_report.py`      | Etapas Python                                  |
 | `reports/analise-2026.md`                                                            | Relatório de inteligência                      |

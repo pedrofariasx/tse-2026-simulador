@@ -3,10 +3,11 @@ import path from 'node:path';
 
 export const HOST = 'https://resultados.tse.jus.br/oficial';
 export const CICLO = 'ele2026';
-export const ELEICAO = '6257';
-export const E6 = 'e006257';
-export const TURNO = '1';
-export const CARGO = '1';
+// Configurável via env para suportar o 2º turno (novo ID de eleição).
+export const ELEICAO = process.env.TSE_ELEICAO || '6257';
+export const E6 = 'e' + String(ELEICAO).padStart(6, '0');
+export const TURNO = process.env.TSE_TURNO || '1';
+export const CARGO = process.env.TSE_CARGO || '1';
 
 export const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 export const DATA = path.join(ROOT, 'data');
@@ -22,11 +23,11 @@ export function decodeJws(text) {
 const pad = (v, n) => String(v).padStart(n, '0');
 
 /** URL for the unified vote file. geo = {uf, mun?, zona?} */
-export function voteUrl({ uf, mun, zona }) {
+export function voteUrl({ uf, mun, zona, cargo = CARGO }) {
   let stem = uf;
   if (mun) stem += pad(mun, 5);
   if (zona) stem += `-z${pad(zona, 4)}`;
-  return `${HOST}/${CICLO}/${ELEICAO}/dados/${uf}/${stem}-c0001-${E6}-u.jws`;
+  return `${HOST}/${CICLO}/${ELEICAO}/dados/${uf}/${stem}-c${pad(cargo, 4)}-${E6}-u.jws`;
 }
 
 export function abUrl(uf) {
@@ -35,6 +36,31 @@ export function abUrl(uf) {
 
 export function munConfigUrl() {
   return `${HOST}/${CICLO}/${ELEICAO}/config/mun-${E6}-cm.jws`;
+}
+
+/**
+ * Descobre o ID da eleição de um dado turno sondando a API do TSE.
+ * O 1º turno é 6257; o 2º turno recebe um novo ID que o TSE publica
+ * perto da data da eleição. Retorna o primeiro ID cujo arquivo
+ * presidencial (c0001) tenha o turno procurado, ou null.
+ */
+export async function discoverElectionId(turno, startId = 6258, endId = 6400) {
+  const ids = [];
+  for (let id = startId; id <= endId; id++) ids.push(id);
+  const found = [];
+  await pool(ids, 24, async (id) => {
+    const e6 = 'e' + String(id).padStart(6, '0');
+    const url = `${HOST}/${CICLO}/${id}/dados/br/br-c0001-${e6}-u.jws`;
+    try {
+      const txt = await getText(url, 1, 12000);
+      if (!txt) return;
+      const json = decodeJws(txt);
+      if (String(json.t) === String(turno)) found.push(id);
+    } catch {
+      /* 404 ou erro: eleição ainda não existe */
+    }
+  }, { label: 'discover', every: 200 });
+  return found.length ? Math.min(...found) : null;
 }
 
 export async function getText(url, tries = 4, timeout = 45000) {

@@ -4,6 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { getOrUpdateAiAnalysis, runAiAnalysis, startHourlyAgent } from './ai_agent.mjs';
+import { startSegundoTurnoAgent, getSegundoTurnoStatus, forceSegundoTurnoCollection } from './segundo_turno_agent.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -75,15 +76,60 @@ app.get('/api/data', (req, res) => {
 });
 
 // Apuracao evolution time series (from per-municipality ab timestamps)
+// ?turno=1 (padrão) ou ?turno=2 para o 2º turno
 app.get('/api/evolution', (req, res) => {
   try {
-    const evoPath = path.join(DATA_DIR, 'evolution.json');
+    const turno = req.query.turno || '1';
+    const evoPath = path.join(DATA_DIR, turno === '1' ? 'evolution.json' : `evolution-t${turno}.json`);
     if (fs.existsSync(evoPath)) {
       return res.json(JSON.parse(fs.readFileSync(evoPath, 'utf8')));
     }
-    res.status(404).json({ error: 'evolution.json not found — run: npm run evolution' });
+    res.status(404).json({ error: `dados do turno ${turno} não encontrados — run: npm run evolution -- --turno=${turno}` });
   } catch (err) {
     res.status(500).json({ error: 'Failed to read evolution data', details: err.message });
+  }
+});
+
+// Dados por municipio para o mapa (ibge, timestamp, votos)
+// ?turno=1 (padrão) ou ?turno=2 para o 2º turno
+app.get('/api/mapa', (req, res) => {
+  try {
+    const turno = req.query.turno || '1';
+    const mapaPath = path.join(DATA_DIR, turno === '1' ? 'mapa.json' : `mapa-t${turno}.json`);
+    if (!fs.existsSync(mapaPath)) {
+      return res.status(404).json({ error: `dados do turno ${turno} não encontrados — run: npm run mapa -- --turno=${turno}` });
+    }
+    const mapa = JSON.parse(fs.readFileSync(mapaPath, 'utf8'));
+    const municipios = mapa.municipios.map((m) => ({
+      ibge: m.ibge,
+      t: m.t,
+      f: m.flavio,
+      l: m.lula,
+      n: m.nome,
+      u: (m.uf || '').toUpperCase(),
+    }));
+    res.json({ t0: mapa.t0, t1: mapa.t1, municipios });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read map data', details: err.message });
+  }
+});
+
+// Status do agente automático do 2º turno
+app.get('/api/segundo-turno/status', (req, res) => {
+  try {
+    res.json(getSegundoTurnoStatus());
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read status', details: err.message });
+  }
+});
+
+// Força uma coleta do 2º turno (manual)
+app.post('/api/segundo-turno/coletar', async (req, res) => {
+  try {
+    const resultado = await forceSegundoTurnoCollection();
+    res.json(resultado);
+  } catch (err) {
+    res.status(500).json({ ok: false, erro: err.message });
   }
 });
 
@@ -200,6 +246,9 @@ const server = app.listen(PORT, HOST, () => {
   // Start autonomous 1-hour agent
   const intervalHours = Number(process.env.UPDATE_INTERVAL_HOURS || 1);
   startHourlyAgent(intervalHours * 60 * 60 * 1000);
+
+  // Start autonomous 2nd-round collection agent
+  startSegundoTurnoAgent();
 });
 
 // Graceful shutdown

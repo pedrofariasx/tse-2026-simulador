@@ -1,14 +1,36 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { OUT } from './lib.mjs';
+import { discoverCandidates } from './candidatos.mjs';
 
-const SRC = path.join(OUT, 'tse_6257_t1_ab.jsonl');
-const VOTOS_SRC = path.join(OUT, 'tse_6257_t1.jsonl');
-const DEST = path.join(OUT, 'evolution.json');
+const TURNO = (process.argv.find((a) => a.startsWith('--turno=')) || '').split('=')[1] || '1';
 const BUCKET_MIN = 5;
 
-const SQ_FLAVIO = '280002551544';
-const SQ_LULA = '280002542548';
+// Localiza os arquivos de origem para o turno (qualquer ID de eleição).
+const reAb = new RegExp(`^tse_\\d+_t${TURNO}_ab\\.jsonl$`);
+const reVotos = new RegExp(`^tse_\\d+_t${TURNO}\\.jsonl$`);
+const files = fs.readdirSync(OUT);
+const abFile = files.find((f) => reAb.test(f));
+const votosFile = files.find((f) => reVotos.test(f));
+if (!abFile || !votosFile) {
+  console.error(`arquivos do turno ${TURNO} não encontrados em ${OUT}`);
+  console.error('  esperado: tse_<id>_t' + TURNO + '_ab.jsonl e tse_<id>_t' + TURNO + '.jsonl');
+  console.error('  rode: npm run scrape -- --turno=' + TURNO);
+  process.exit(1);
+}
+const SRC = path.join(OUT, abFile);
+const VOTOS_SRC = path.join(OUT, votosFile);
+const DEST = path.join(OUT, TURNO === '1' ? 'evolution.json' : `evolution-t${TURNO}.json`);
+
+// Descobre os sqcand de Flávio e Lula no nível "br".
+const cand = await discoverCandidates(VOTOS_SRC);
+if (!cand.flavio || !cand.lula) {
+  console.error('não encontrei Flávio/Lula no nível br de', votosFile);
+  process.exit(1);
+}
+const SQ_FLAVIO = cand.flavio;
+const SQ_LULA = cand.lula;
+console.log(`candidatos: Flávio=${cand.nomes.flavio} (${SQ_FLAVIO}) | Lula=${cand.nomes.lula} (${SQ_LULA})`);
 
 const parseTs = (s) => {
   const [d, t] = s.split(' ');
@@ -134,9 +156,10 @@ const series = buckets.map((b) => {
 const half = series.find((s) => s.pct_secoes >= 50);
 const out = {
   gerado_em: new Date().toISOString(),
-  origem: 'tse_6257_t1_ab.jsonl + tse_6257_t1.jsonl (nivel municipio)',
+  turno: TURNO,
+  origem: `${abFile} + ${votosFile} (nivel municipio)`,
   nota: 'Cada municipio entra na serie no horario de sua ultima atualizacao durante a apuracao (horario de Brasilia). A curva aproxima o progresso da totalizacao e o acumulado de votos conforme os municipios foram totalizados.',
-  candidatos: { flavio: 'FLAVIO BOLSONARO (PL)', lula: 'LULA (PT)' },
+  candidatos: { flavio: cand.nomes.flavio, lula: cand.nomes.lula },
   totais: { secoes: totSec, eleitores: totEle, municipios: totMun },
   inicio: series[0].t,
   fim: series[series.length - 1].t,
