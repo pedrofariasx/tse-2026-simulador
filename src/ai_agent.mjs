@@ -7,7 +7,7 @@ const AI_FILE = path.join(ROOT, 'data', 'processed', 'ai_news_analysis.json');
 const DASH_AI_FILE = path.join(ROOT, 'dashboard', 'ai-analysis.json');
 
 const GATEWAY_URL = process.env.KILO_GATEWAY_URL || 'https://api.kilo.ai/api/gateway/v1/chat/completions';
-const MODEL_NAME = process.env.KILO_MODEL || 'stepfun/step-3.7-flash:free';
+const MODEL_NAME = process.env.KILO_MODEL || 'stepfun/step-5-preview-free';
 
 /**
  * Fetch news from Google News RSS in Portuguese.
